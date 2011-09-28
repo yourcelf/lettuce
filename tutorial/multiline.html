@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>multi-line strings &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="scenario outlines" href="scenario-outlines.html" />
+    <link rel="prev" title="handling data with tables" href="tables.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="tables.html" title="handling data with tables">previous</a>
+     |
+   |
+    <a href="scenario-outlines.html" title="scenario outlines">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="tutorial-multiline">
+            
+  <div class="section" id="lettuce-multi-line-strings">
+<span id="lettuce-tutorial-multiline"></span><h1>multi-line strings<a class="headerlink" href="#lettuce-multi-line-strings" title="Permalink to this headline">¶</a></h1>
+<p>Now imagine you are writing an application which manipulates
+strings. When writing the tests, you may find yourself wanting to put
+multi-line strings in your steps.</p>
+<p>Multi-line strings will do the trick</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Feature</span><span class="p">:</span> <span class="no">Split</span> <span class="n">a</span> <span class="n">string</span> <span class="n">into</span> <span class="n">multiple</span> <span class="n">lines</span> <span class="n">on</span> <span class="n">spaces</span>
+  <span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">make</span> <span class="n">strings</span> <span class="n">more</span> <span class="n">readable</span>
+  <span class="no">As</span> <span class="n">a</span> <span class="n">user</span>
+  <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">have</span> <span class="n">words</span> <span class="nb">split</span> <span class="n">into</span> <span class="n">their</span> <span class="n">own</span> <span class="n">lines</span>
+
+  <span class="no">Scenario</span><span class="p">:</span> <span class="no">Split</span> <span class="n">small</span><span class="o">-</span><span class="n">ish</span> <span class="n">string</span>
+    <span class="no">Given</span> <span class="n">I</span> <span class="n">have</span> <span class="n">the</span> <span class="n">string</span> <span class="s2">&quot;one two three four five&quot;</span>
+    <span class="no">When</span> <span class="n">I</span> <span class="n">ask</span> <span class="n">to</span> <span class="n">have</span> <span class="n">the</span> <span class="n">string</span> <span class="nb">split</span> <span class="n">into</span> <span class="n">lines</span>
+    <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="n">following</span><span class="p">:</span>
+      <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">      one</span>
+<span class="s2">      two</span>
+<span class="s2">      three</span>
+<span class="s2">      four</span>
+<span class="s2">      five</span>
+<span class="s2">      &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>A line with nothing but three quotes (&#8220;&#8221;&#8221;) is used to indicate the
+beginning and the end of a multi-line string.</p>
+<p>Now, let&#8217;s define a step that knows how to use this.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="n">step</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I should see the following:&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">i_should_see_the_following</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">step</span><span class="o">.</span><span class="n">multiline</span> <span class="o">==</span> <span class="s">&quot;&quot;&quot;one</span>
+<span class="s">two</span>
+<span class="s">three</span>
+<span class="s">four</span>
+<span class="s">five&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Nice and straightforward.</p>
+<p>Notice that leading spaces are stripped, and there&#8217;s not a newline at
+the beginning or end. This is due to the way that the parser strips
+blank lines and leading and trailing whitespace.</p>
+<p>If you need blank lines leading or trailing whitespace, you can
+include lines which start and/or end with double quote, and they will
+be concatenated with the other multiline lines, with the quotes
+stripped off and their whitespace preserved.</p>
+<p>For example</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Feature</span><span class="p">:</span> <span class="no">Split</span> <span class="n">a</span> <span class="n">string</span> <span class="n">into</span> <span class="n">multiple</span> <span class="n">lines</span> <span class="n">on</span> <span class="n">spaces</span>
+  <span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">make</span> <span class="n">strings</span> <span class="n">more</span> <span class="n">readable</span>
+  <span class="no">As</span> <span class="n">a</span> <span class="n">user</span>
+  <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">have</span> <span class="n">words</span> <span class="nb">split</span> <span class="n">into</span> <span class="n">their</span> <span class="n">own</span> <span class="n">lines</span>
+
+  <span class="no">Scenario</span><span class="p">:</span> <span class="no">Split</span> <span class="n">small</span><span class="o">-</span><span class="n">ish</span> <span class="n">string</span>
+    <span class="no">Given</span> <span class="n">I</span> <span class="n">have</span> <span class="n">the</span> <span class="n">string</span> <span class="s2">&quot;one two three four five&quot;</span>
+    <span class="no">When</span> <span class="n">I</span> <span class="n">ask</span> <span class="n">to</span> <span class="n">have</span> <span class="n">the</span> <span class="n">string</span> <span class="nb">split</span> <span class="n">into</span> <span class="n">lines</span>
+    <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="n">following</span><span class="p">:</span>
+      <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">     &quot;</span> <span class="n">one</span>
+     <span class="s2">&quot; two  &quot;</span>
+     <span class="s2">&quot;  three   &quot;</span>
+     <span class="s2">&quot;   four    &quot;</span>
+     <span class="s2">&quot;    five     &quot;</span>
+     <span class="s2">&quot;</span>
+<span class="s2">      &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Which we can verify like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="n">step</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I should see the following:&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">i_should_see_the_following</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">step</span><span class="o">.</span><span class="n">multiline</span> <span class="o">==</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+    <span class="s">&#39; one&#39;</span><span class="p">,</span>
+    <span class="s">&#39;  two  &#39;</span><span class="p">,</span>
+    <span class="s">&#39;   three   &#39;</span><span class="p">,</span>
+    <span class="s">&#39;    four    &#39;</span><span class="p">,</span>
+    <span class="s">&#39;     five     &#39;</span><span class="p">,</span>
+    <span class="s">&#39;&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Admittedly, this is a hack, but there&#8217;s no clean way to preserve
+whitespace in only one section of a feature definition in the current
+parser implementation.</p>
+<p>Note that the first line doesn&#8217;t have any whitespace at the end, and
+thus doesn&#8217;t need to have a quote at the end of it.</p>
+<p>Also note that if you want a double quote at the beginning of a line
+in your string, you&#8217;ll have to start your line with two double quotes,
+since the first one will be stripped off.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="tables.html">handling data with tables</a></li>
+    
+    
+      <li>Next: <a href="scenario-outlines.html">scenario outlines</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>multi-line strings</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tutorial/multiline.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="tables.html" title="handling data with tables">previous</a>
+     |
+   |
+    <a href="scenario-outlines.html" title="scenario outlines">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

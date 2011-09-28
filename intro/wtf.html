@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>What the f** eature ? &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="introduction" href="../tutorial/simple.html" />
+    <link rel="prev" title="Installing Lettuce" href="install.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="install.html" title="Installing Lettuce">previous</a>
+     |
+   |
+    <a href="../tutorial/simple.html" title="introduction">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="intro-wtf">
+            
+  <div class="section" id="lettuce-what-the-f-eature">
+<span id="lettuce-intro-wtf"></span><h1>What the f** eature ?<a class="headerlink" href="#lettuce-what-the-f-eature" title="Permalink to this headline">¶</a></h1>
+<p>Unless you are used to <a class="reference external" href="http://cukes.info">Cucumber</a> nomenclature, you may be wondering
+about the terms that surround Lettuce concepts.</p>
+<p>If this is your case, this introduction will guide you through the
+very basic keywords that cover Lettuce.</p>
+<div class="section" id="lettuce-features">
+<h2>Features<a class="headerlink" href="#lettuce-features" title="Permalink to this headline">¶</a></h2>
+<p>Since Lettuce is used to test the behavior of a project, the behavior is broken
+up in to features of the system.</p>
+<p>After enumerating features, you need to create scenarios which will
+describe those feature. Thus, scenarios are components of a feature.</p>
+<p>Let&#8217;s learn by example: suppose we want to create a system to manage a
+address book.</p>
+<p>OK, one of the very basic features of a address book is adding contacts, which will
+include their name and phone numbers.</p>
+<p>This is how Lettuce allows you to describe such feature:</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Feature</span><span class="p">:</span> <span class="no">Add</span> <span class="n">people</span> <span class="n">to</span> <span class="n">address</span> <span class="n">book</span>
+  <span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">organize</span> <span class="n">phone</span> <span class="n">numbers</span> <span class="n">of</span> <span class="n">friends</span>
+  <span class="no">As</span> <span class="n">a</span> <span class="n">wise</span> <span class="n">person</span>
+  <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">add</span> <span class="n">a</span> <span class="n">people</span> <span class="n">to</span> <span class="n">my</span> <span class="n">address</span> <span class="n">book</span>
+
+  <span class="no">Scenario</span><span class="p">:</span> <span class="no">Add</span> <span class="n">a</span> <span class="n">person</span> <span class="n">with</span> <span class="nb">name</span> <span class="ow">and</span> <span class="n">phone</span> <span class="n">number</span>
+    <span class="no">Given</span> <span class="n">I</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;name&quot;</span> <span class="n">with</span> <span class="s2">&quot;John&quot;</span>
+    <span class="no">And</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;phone&quot;</span> <span class="n">with</span> <span class="s2">&quot;2233-4455&quot;</span>
+    <span class="no">When</span> <span class="n">I</span> <span class="n">save</span> <span class="n">the</span> <span class="n">data</span>
+    <span class="no">Then</span> <span class="n">I</span> <span class="n">see</span> <span class="n">that</span> <span class="n">my</span> <span class="n">contact</span> <span class="n">book</span> <span class="n">has</span> <span class="n">the</span> <span class="n">persons</span><span class="p">:</span>
+      <span class="o">|</span> <span class="nb">name</span> <span class="o">|</span> <span class="n">phone</span>     <span class="o">|</span>
+      <span class="o">|</span> <span class="no">John</span> <span class="o">|</span> <span class="mi">2233</span><span class="o">-</span><span class="mi">4455</span> <span class="o">|</span>
+
+  <span class="no">Scenario</span><span class="p">:</span> <span class="no">Avoiding</span> <span class="n">a</span> <span class="n">invalid</span> <span class="n">phone</span> <span class="n">number</span>
+    <span class="no">Given</span> <span class="n">I</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;name&quot;</span> <span class="n">with</span> <span class="s2">&quot;John&quot;</span>
+    <span class="no">And</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;phone&quot;</span> <span class="n">with</span> <span class="s2">&quot;000&quot;</span>
+    <span class="no">When</span> <span class="n">I</span> <span class="n">save</span> <span class="n">the</span> <span class="n">data</span>
+    <span class="no">Then</span> <span class="n">I</span> <span class="n">get</span> <span class="n">the</span> <span class="n">error</span><span class="p">:</span> <span class="s2">&quot;000 is a invalid phone number&quot;</span>
+</pre></div>
+</div>
+<p>In the feature above we can notice a few elements, for instance:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The feature name:</li>
+</ul>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Feature</span><span class="p">:</span> <span class="no">Add</span> <span class="n">people</span> <span class="n">to</span> <span class="n">contact</span> <span class="n">book</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Feature headline:</li>
+</ul>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">organize</span> <span class="n">phone</span> <span class="n">numbers</span> <span class="n">of</span> <span class="n">friends</span>
+<span class="no">As</span> <span class="n">a</span> <span class="n">wise</span> <span class="n">person</span>
+<span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">add</span> <span class="n">a</span> <span class="n">people</span> <span class="n">to</span> <span class="n">my</span> <span class="n">address</span> <span class="n">book</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Scenarios:</li>
+</ul>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Scenario</span><span class="p">:</span> <span class="no">Add</span> <span class="n">a</span> <span class="n">person</span> <span class="n">with</span> <span class="nb">name</span> <span class="ow">and</span> <span class="n">phone</span>
+  <span class="no">Given</span> <span class="n">I</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;name&quot;</span> <span class="n">with</span> <span class="s2">&quot;John&quot;</span>
+  <span class="no">And</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;phone&quot;</span> <span class="n">with</span> <span class="s2">&quot;2233-4455&quot;</span>
+  <span class="no">When</span> <span class="n">I</span> <span class="n">save</span> <span class="n">the</span> <span class="n">data</span>
+  <span class="no">Then</span> <span class="n">I</span> <span class="n">see</span> <span class="n">that</span> <span class="n">my</span> <span class="n">contact</span> <span class="n">book</span> <span class="n">has</span> <span class="n">the</span> <span class="n">persons</span><span class="p">:</span>
+    <span class="o">|</span> <span class="nb">name</span> <span class="o">|</span> <span class="n">phone</span>     <span class="o">|</span>
+    <span class="o">|</span> <span class="no">John</span> <span class="o">|</span> <span class="mi">2233</span><span class="o">-</span><span class="mi">4455</span> <span class="o">|</span>
+
+<span class="no">Scenario</span><span class="p">:</span> <span class="no">Avoiding</span> <span class="n">a</span> <span class="n">invalid</span> <span class="n">phone</span> <span class="n">number</span>
+  <span class="no">Given</span> <span class="n">I</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;name&quot;</span> <span class="n">with</span> <span class="s2">&quot;John&quot;</span>
+  <span class="no">And</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;phone&quot;</span> <span class="n">with</span> <span class="s2">&quot;000&quot;</span>
+  <span class="no">When</span> <span class="n">I</span> <span class="n">save</span> <span class="n">the</span> <span class="n">data</span>
+  <span class="no">Then</span> <span class="n">I</span> <span class="n">get</span> <span class="n">the</span> <span class="n">error</span><span class="p">:</span> <span class="s2">&quot;000 is a invalid phone number&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="lettuce-scenarios">
+<h2>Scenarios<a class="headerlink" href="#lettuce-scenarios" title="Permalink to this headline">¶</a></h2>
+<p>One or more scenarios compose a feature. There are two kinds of
+scenarios:</p>
+<div class="section" id="lettuce-simple">
+<h3>Simple<a class="headerlink" href="#lettuce-simple" title="Permalink to this headline">¶</a></h3>
+<p>The simple scenarios are composed by steps, no matter if they are
+simple or tabulated steps.</p>
+<p>The feature above is composed by two simple scenarios.</p>
+</div>
+<div class="section" id="lettuce-outlined">
+<h3>Outlined<a class="headerlink" href="#lettuce-outlined" title="Permalink to this headline">¶</a></h3>
+<p>Outlined scenarios are very handy because they help you to avoid
+repetition.</p>
+<p>Suppose that we need to fill the same form many times, each time
+with a different data set. This is how it could be done using scenario
+outlines:</p>
+<p>Let&#8217;s see how it could be done with scenario outlines:</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Feature</span><span class="p">:</span> <span class="no">Apply</span> <span class="n">all</span> <span class="n">my</span> <span class="n">friends</span> <span class="n">to</span> <span class="n">attend</span> <span class="n">a</span> <span class="n">conference</span>
+  <span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">apply</span> <span class="n">all</span> <span class="n">my</span> <span class="n">friends</span> <span class="n">to</span> <span class="n">the</span> <span class="k">next</span> <span class="no">PyCon_</span>
+  <span class="no">As</span> <span class="n">a</span> <span class="n">lazy</span> <span class="n">person</span>
+  <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">same</span> <span class="n">form</span> <span class="n">many</span> <span class="n">times</span>
+
+  <span class="no">Scenario</span> <span class="no">Outline</span><span class="p">:</span> <span class="no">Apply</span> <span class="n">my</span> <span class="n">friends</span>
+    <span class="no">Go</span> <span class="n">to</span> <span class="n">the</span> <span class="n">conference</span> <span class="n">website</span>
+    <span class="no">Access</span> <span class="n">the</span> <span class="n">link</span> <span class="s2">&quot;I will attend&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;name&quot;</span> <span class="n">with</span> <span class="s2">&quot;&lt;friend_name&gt;&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;email&quot;</span> <span class="n">with</span> <span class="s2">&quot;&lt;friend_email&gt;&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;birthday&quot;</span> <span class="n">with</span> <span class="s2">&quot;&lt;friend_birthdate&gt;&quot;</span>
+    <span class="no">Click</span> <span class="n">on</span> <span class="s2">&quot;confirm attendance&quot;</span> <span class="n">button</span>
+
+  <span class="no">Examples</span><span class="p">:</span>
+    <span class="o">|</span> <span class="n">friend_name</span> <span class="o">|</span> <span class="n">friend_email</span>         <span class="o">|</span> <span class="n">friend_birthdate</span> <span class="o">|</span>
+    <span class="o">|</span> <span class="no">Mary</span>        <span class="o">|</span> <span class="n">mary</span><span class="vi">@domain</span><span class="o">.</span><span class="n">com</span>      <span class="o">|</span> <span class="mi">1988</span><span class="o">/</span><span class="mo">02</span><span class="o">/</span><span class="mi">10</span>       <span class="o">|</span>
+    <span class="o">|</span> <span class="no">Lincoln</span>     <span class="o">|</span> <span class="n">lincoln</span><span class="vi">@provider</span><span class="o">.</span><span class="n">net</span> <span class="o">|</span> <span class="mi">1987</span><span class="o">/</span><span class="mi">09</span><span class="o">/</span><span class="mi">10</span>       <span class="o">|</span>
+    <span class="o">|</span> <span class="no">Marcus</span>      <span class="o">|</span> <span class="n">marcus</span><span class="vi">@other</span><span class="o">.</span><span class="n">org</span>     <span class="o">|</span> <span class="mi">1990</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mo">05</span>       <span class="o">|</span>
+</pre></div>
+</div>
+<p>In a nutshell, the scenario above is equivalent to write the huge code
+bellow</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Feature</span><span class="p">:</span> <span class="no">Apply</span> <span class="n">all</span> <span class="n">my</span> <span class="n">friends</span> <span class="n">to</span> <span class="n">attend</span> <span class="n">a</span> <span class="n">conference</span>
+  <span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">apply</span> <span class="n">all</span> <span class="n">my</span> <span class="n">friends</span> <span class="n">to</span> <span class="n">the</span> <span class="k">next</span> <span class="no">PyCon_</span>
+  <span class="no">As</span> <span class="n">a</span> <span class="n">lazy</span> <span class="n">person</span>
+  <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">fill</span> <span class="n">the</span> <span class="n">same</span> <span class="n">form</span> <span class="n">many</span> <span class="n">times</span>
+
+  <span class="no">Scenario</span><span class="p">:</span> <span class="no">Apply</span> <span class="no">Mary</span>
+    <span class="no">Go</span> <span class="n">to</span> <span class="n">the</span> <span class="n">conference</span> <span class="n">website</span>
+    <span class="no">Access</span> <span class="n">the</span> <span class="n">link</span> <span class="s2">&quot;I will attend&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;name&quot;</span> <span class="n">with</span> <span class="s2">&quot;Mary&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;email&quot;</span> <span class="n">with</span> <span class="s2">&quot;mary@domain.com&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;birthday&quot;</span> <span class="n">with</span> <span class="s2">&quot;1988/02/10&quot;</span>
+    <span class="no">Click</span> <span class="n">on</span> <span class="s2">&quot;confirm attendance&quot;</span> <span class="n">button</span>
+
+  <span class="no">Scenario</span><span class="p">:</span> <span class="no">Apply</span> <span class="no">Lincoln</span>
+    <span class="no">Go</span> <span class="n">to</span> <span class="n">the</span> <span class="n">conference</span> <span class="n">website</span>
+    <span class="no">Access</span> <span class="n">the</span> <span class="n">link</span> <span class="s2">&quot;I will attend&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;name&quot;</span> <span class="n">with</span> <span class="s2">&quot;Lincoln&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;email&quot;</span> <span class="n">with</span> <span class="s2">&quot;lincoln@provider.net&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;birthday&quot;</span> <span class="n">with</span> <span class="s2">&quot;1987/09/10&quot;</span>
+    <span class="no">Click</span> <span class="n">on</span> <span class="s2">&quot;confirm attendance&quot;</span> <span class="n">button</span>
+
+  <span class="no">Scenario</span><span class="p">:</span> <span class="no">Apply</span> <span class="no">Marcus</span>
+    <span class="no">Go</span> <span class="n">to</span> <span class="n">the</span> <span class="n">conference</span> <span class="n">website</span>
+    <span class="no">Access</span> <span class="n">the</span> <span class="n">link</span> <span class="s2">&quot;I will attend&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;name&quot;</span> <span class="n">with</span> <span class="s2">&quot;Marcus&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;email&quot;</span> <span class="n">with</span> <span class="s2">&quot;marcus@other.org&quot;</span>
+    <span class="no">Fill</span> <span class="n">the</span> <span class="n">field</span> <span class="s2">&quot;birthday&quot;</span> <span class="n">with</span> <span class="s2">&quot;1990/10/05&quot;</span>
+    <span class="no">Click</span> <span class="n">on</span> <span class="s2">&quot;confirm attendance&quot;</span> <span class="n">button</span>
+</pre></div>
+</div>
+<p>As you can notice, scenario outlines are very useful and help you on
+avoiding text and code repetition</p>
+</div>
+</div>
+<div class="section" id="lettuce-steps-and-its-definitions">
+<h2>Steps and its definitions<a class="headerlink" href="#lettuce-steps-and-its-definitions" title="Permalink to this headline">¶</a></h2>
+<p>Comparable with Scenarios, Steps comes in two kinds:</p>
+<div class="section" id="lettuce-simple-steps">
+<h3>Simple steps<a class="headerlink" href="#lettuce-simple-steps" title="Permalink to this headline">¶</a></h3>
+<p>Simple steps are actually simple and they are related to the step
+definitions inside the scenarios.</p>
+<p>Lettuce considers each line of a scenario as a simple step. The only
+exception is if the first non-blank character of the line is a pipe
+<tt class="docutils literal"><span class="pre">|</span></tt>. In this case, Lettuce will consider the step as a tabular step.</p>
+<p>For instance, a simple step may look like this:</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Given</span> <span class="n">I</span> <span class="n">go</span> <span class="n">to</span> <span class="n">the</span> <span class="n">conference</span> <span class="n">website</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-tabular-steps">
+<h3>Tabular steps<a class="headerlink" href="#lettuce-tabular-steps" title="Permalink to this headline">¶</a></h3>
+<p>Analog to Outlined Scenarios, the tabular steps are very useful, and
+avoid repetition of text.</p>
+<p>Tabular steps are specially useful to set up some data set in a
+scenario, or to compare a set of data to the expected results in the
+end of the scenario.</p>
+<p>However, feel free to use this whenever you find it useful.</p>
+<p>Example:</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Given</span> <span class="n">I</span> <span class="n">have</span> <span class="n">the</span> <span class="n">following</span> <span class="n">contacts</span> <span class="k">in</span> <span class="n">my</span> <span class="n">database</span>
+  <span class="o">|</span> <span class="nb">name</span>  <span class="o">|</span> <span class="n">phone</span>      <span class="o">|</span>
+  <span class="o">|</span> <span class="no">John</span>  <span class="o">|</span> <span class="mi">2233</span><span class="o">-</span><span class="mi">4455</span>  <span class="o">|</span>
+  <span class="o">|</span> <span class="no">Smith</span> <span class="o">|</span> <span class="mi">9988</span><span class="o">-</span><span class="mi">7766</span>  <span class="o">|</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">What the f** eature ?</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#scenarios">Scenarios</a><ul>
+<li><a class="reference internal" href="#simple">Simple</a></li>
+<li><a class="reference internal" href="#outlined">Outlined</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#steps-and-its-definitions">Steps and its definitions</a><ul>
+<li><a class="reference internal" href="#simple-steps">Simple steps</a></li>
+<li><a class="reference internal" href="#tabular-steps">Tabular steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="install.html">Installing Lettuce</a></li>
+    
+    
+      <li>Next: <a href="../tutorial/simple.html">introduction</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>What the f** eature ?</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/intro/wtf.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="install.html" title="Installing Lettuce">previous</a>
+     |
+   |
+    <a href="../tutorial/simple.html" title="introduction">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

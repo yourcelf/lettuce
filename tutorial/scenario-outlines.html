@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scenario outlines &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="calling steps from step definitions" href="steps-from-step-definitions.html" />
+    <link rel="prev" title="multi-line strings" href="multiline.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="multiline.html" title="multi-line strings">previous</a>
+     |
+   |
+    <a href="steps-from-step-definitions.html" title="calling steps from step definitions">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="tutorial-scenario-outlines">
+            
+  <div class="section" id="lettuce-scenario-outlines">
+<span id="lettuce-tutorial-scenario-outlines"></span><h1>scenario outlines<a class="headerlink" href="#lettuce-scenario-outlines" title="Permalink to this headline">¶</a></h1>
+<p>On our <a class="reference internal" href="simple.html#tutorial-simple"><em>first description file</em></a>, <tt class="docutils literal"><span class="pre">zero.feature</span></tt>, all scenarios were
+similar. This made us repeat most of the text again and again.</p>
+<p><strong>Isn&#8217;t there a better way to deal with this - when several scenarios are almost equal and only some values change?</strong></p>
+<p>Yes, there is! :) You just need to use scenarios outlines.</p>
+<p>An example is shown below:</p>
+<div class="highlight-ruby"><pre>Feature: Compute factorial
+  In order to play with Lettuce
+  As beginners
+  We'll implement factorial
+
+  Scenario Outline: Factorials [0-4]
+    Given I have the number &lt;number&gt;
+    When I compute its factorial
+    Then I see the number &lt;result&gt;
+
+  Examples:
+    | number | result |
+    | 0      | 1      |
+    | 1      | 1      |
+    | 2      | 2      |
+    | 3      | 6      |
+    | 4      | 24     |</pre>
+</div>
+<p>This way, you will only need to provide the values that really change,
+reducing &#8220;copy &amp; paste&#8221; work and making your tests more clear.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you overwrite zero.feature using the example above, and goto
+step [e], you&#8217;ll see your description expanding to the five
+previous scenarios:</p>
+</div>
+<img alt="../_images/screenshot7.png" src="../_images/screenshot7.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="multiline.html">multi-line strings</a></li>
+    
+    
+      <li>Next: <a href="steps-from-step-definitions.html">calling steps from step definitions</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>scenario outlines</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tutorial/scenario-outlines.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="multiline.html" title="multi-line strings">previous</a>
+     |
+   |
+    <a href="steps-from-step-definitions.html" title="calling steps from step definitions">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Web development fun with Lettuce and Django &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="prev" title="Lettuce recipe: Using nose for pretty assertions" href="nose.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="nose.html" title="Lettuce recipe: Using nose for pretty assertions">previous</a>
+     |</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="recipes-django-lxml">
+            
+  <div class="section" id="lettuce-web-development-fun-with-lettuce-and-django">
+<span id="lettuce-recipes-django-lxml"></span><h1>Web development fun with Lettuce and Django<a class="headerlink" href="#lettuce-web-development-fun-with-lettuce-and-django" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://djangoproject.com">Django</a> is a awesome web framework, very mature, aims for simplicity
+and the best of all: it&#8217;s fun to use it.</p>
+<p>To make it even more fun, lettuce has built-in support for Django.</p>
+<div class="section" id="lettuce-getting-started">
+<h2>Getting started<a class="headerlink" href="#lettuce-getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="lettuce-install-the-lettuce-django-app">
+<h3>1. install the lettuce django app<a class="headerlink" href="#lettuce-install-the-lettuce-django-app" title="Permalink to this headline">¶</a></h3>
+<p>Pick up any Django project, and add <tt class="docutils literal"><span class="pre">lettuce.django</span></tt> in its
+<tt class="docutils literal"><span class="pre">settings.py</span></tt> configuration file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+
+    <span class="c"># ... other apps here ...</span>
+    <span class="s">&#39;my_app&#39;</span><span class="p">,</span>
+    <span class="s">&#39;foobar&#39;</span><span class="p">,</span>
+    <span class="s">&#39;another_app&#39;</span><span class="p">,</span>
+    <span class="s">&#39;lettuce.django&#39;</span><span class="p">,</span> <span class="c"># this guy will do the job :)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Considering the configuration above, let&#8217;s say we want to write tests
+for the <tt class="docutils literal"><span class="pre">my_app</span></tt> django application.</p>
+</div>
+<div class="section" id="lettuce-create-the-feature-directories">
+<h3>2. create the feature directories<a class="headerlink" href="#lettuce-create-the-feature-directories" title="Permalink to this headline">¶</a></h3>
+<p>Lettuce will look for a <tt class="docutils literal"><span class="pre">features</span></tt> folder inside every installed app:</p>
+<div class="highlight-python"><pre>/home/user/projects/djangoproject
+     | settings.py
+     | manage.py
+     | urls.py
+     | my_app
+           | features
+                - index.feature
+                - index.py
+     | foobar
+           | features
+                - carrots.feature
+                - foobar-steps.py
+     | another_app
+           | features
+                - first.feature
+                - second.feature
+                - many_steps.py</pre>
+</div>
+</div>
+<div class="section" id="lettuce-write-your-first-feature">
+<h3>3. write your first feature<a class="headerlink" href="#lettuce-write-your-first-feature" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">&#64;index.feature</span></tt>:</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Feature</span><span class="p">:</span> <span class="no">Rocking</span> <span class="n">with</span> <span class="n">lettuce</span> <span class="ow">and</span> <span class="n">django</span>
+
+    <span class="no">Scenario</span><span class="p">:</span> <span class="no">Simple</span> <span class="no">Hello</span> <span class="no">World</span>
+        <span class="no">Given</span> <span class="n">I</span> <span class="n">access</span> <span class="n">the</span> <span class="n">url</span> <span class="s2">&quot;/&quot;</span>
+        <span class="no">Then</span> <span class="n">I</span> <span class="n">see</span> <span class="n">the</span> <span class="n">header</span> <span class="s2">&quot;Hello World&quot;</span>
+
+    <span class="no">Scenario</span><span class="p">:</span> <span class="no">Hello</span> <span class="o">+</span> <span class="n">capitalized</span> <span class="nb">name</span>
+        <span class="no">Given</span> <span class="n">I</span> <span class="n">access</span> <span class="n">the</span> <span class="n">url</span> <span class="s2">&quot;/some-name&quot;</span>
+        <span class="no">Then</span> <span class="n">I</span> <span class="n">see</span> <span class="n">the</span> <span class="n">header</span> <span class="s2">&quot;Hello Some Name&quot;</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">&#64;index-steps.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">django.test.client</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">nose.tools</span> <span class="kn">import</span> <span class="n">assert_equals</span>
+
+<span class="nd">@before.all</span>
+<span class="k">def</span> <span class="nf">set_browser</span><span class="p">():</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">r&#39;I access the url &quot;(.*)&quot;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">access_url</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">dom</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">r&#39;I see the header &quot;(.*)&quot;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">see_header</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">cssselect</span><span class="p">(</span><span class="s">&#39;h1&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">header</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">text</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-run-the-tests">
+<h3>4. run the tests<a class="headerlink" href="#lettuce-run-the-tests" title="Permalink to this headline">¶</a></h3>
+<p>Once you install the <tt class="docutils literal"><span class="pre">lettuce.django</span></tt> app, the command <tt class="docutils literal"><span class="pre">harvest</span></tt> will be available:</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~projects/djangoproject <span class="nv">$ </span>python manage.py harvest
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-specifying-feature-files">
+<h3>5. specifying feature files<a class="headerlink" href="#lettuce-specifying-feature-files" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">harvest</span></tt> command accepts a path to feature files, in order to run
+only the features you want.</p>
+<p>Example:</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~projects/djangoproject <span class="nv">$ </span>python manage.py harvest path/to/my-test.feature
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-grab-actual-example-code">
+<h3>6. grab actual example code<a class="headerlink" href="#lettuce-grab-actual-example-code" title="Permalink to this headline">¶</a></h3>
+<p>In order to assure that lettuce integrate well with Django, it have a
+set of integration tests, there are a actual Django project running
+with lettuce.</p>
+<p>You can grab the code at the <a class="reference external" href="http://github.com/gabrielfalcao/lettuce/tree/master/tests/integration/django/alfaces/">alfaces</a> folder of lettuce git repository</p>
+</div>
+</div>
+</div>
+<div class="section" id="lettuce-technical-details">
+<h1>Technical details<a class="headerlink" href="#lettuce-technical-details" title="Permalink to this headline">¶</a></h1>
+<p>If you want to write acceptance tests that run with web browsers, you
+can user tools like <a class="reference external" href="http://twill.idyll.org/python-api.html">twill</a>, <a class="reference external" href="http://seleniumhq.org/docs/appendix_installing_python_driver_client.html">selenium</a>, <a class="reference external" href="http://code.google.com/p/selenium/wiki/PythonBindings?redir=1">webdriver</a> and <a class="reference external" href="http://www.getwindmill.com/">windmill</a></p>
+<div class="section" id="lettuce-red-tape-less-builtin-server">
+<h2>red-tape-less builtin server<a class="headerlink" href="#lettuce-red-tape-less-builtin-server" title="Permalink to this headline">¶</a></h2>
+<p>Lettuce cleverly runs an instance of the built-in Django HTTP server in
+the background. It tries to bind the HTTP server at <tt class="docutils literal"><span class="pre">localhost:8000</span></tt>
+but if the port is busy, it keeps trying to run in higher ports: 8001,
+8002 and so on until it reaches the maximum port number 65535.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>You can override the default starting port from &#8220;8000&#8221; to any other
+port you want.</p>
+<p class="last">To do so, refer to &#8220;running the HTTP server in other port than
+8000&#8221; below.</p>
+</div>
+<p>So that you can use browser-based tools such as those listed above to
+access Django.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When running the http server, lettuce sets the environment
+variables SERVER_NAME and SERVER_PORT. It was brought for a <a class="reference external" href="http://code.google.com/appengine">GAE</a>
+issue. If it can possibly bring any errors, be warned.</p>
+</div>
+</div>
+<div class="section" id="lettuce-figure-out-django-urls">
+<h2>figure out django urls<a class="headerlink" href="#lettuce-figure-out-django-urls" title="Permalink to this headline">¶</a></h2>
+<p>As the Django HTTP server can be running in any port within the range
+8000 - 65535, it could be hard to figure out the correct URL for your
+project, right?</p>
+<p>Wrong!</p>
+<p>Lettuce is here for you. Within your steps you can use the
+<tt class="docutils literal"><span class="pre">django_url</span></tt> utility function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="n">step</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">lettuce.django</span> <span class="kn">import</span> <span class="n">django_url</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">r&#39;Given I navigate to &quot;(.*)&quot;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">navigate_to_url</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="n">full_url</span> <span class="o">=</span> <span class="n">django_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">full_url</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="lettuce-what-does-django-url-do">
+<h3>what does <tt class="docutils literal"><span class="pre">django_url</span></tt> do ?!?<a class="headerlink" href="#lettuce-what-does-django-url-do" title="Permalink to this headline">¶</a></h3>
+<p>It prepends a Django-internal URL with the HTTP server address.</p>
+<p>In other words, if lettuce binds the http server to localhost:9090 and
+you call <tt class="docutils literal"><span class="pre">django_url</span></tt> with <tt class="docutils literal"><span class="pre">&quot;/admin/login&quot;</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce.django</span> <span class="kn">import</span> <span class="n">django_url</span>
+<span class="n">django_url</span><span class="p">(</span><span class="s">&quot;/admin/login&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;http://localhost:9090/admin/login&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="lettuce-terrain-also-available-in-django-projects">
+<h2>terrain also available in django projects<a class="headerlink" href="#lettuce-terrain-also-available-in-django-projects" title="Permalink to this headline">¶</a></h2>
+<p>At this point you probably know how <a class="reference internal" href="../reference/terrain.html#terrain-py"><em>terrain.py</em></a> works, and it
+also works with Django projects.</p>
+<p>You can setup environment and stuff like that within a <tt class="docutils literal"><span class="pre">terrain.py</span></tt>
+file located at the root of your Django project.</p>
+<p>Taking the very first example of this documentation page, your Django
+project layout would like like this:</p>
+<div class="highlight-python"><pre>/home/user/projects/djangoproject
+     | settings.py
+     | manage.py
+     | urls.py
+     | terrain.py
+     | my_app
+           | features
+                - index.feature
+                - index.py
+     | foobar
+           | features
+                - carrots.feature
+                - foobar-steps.py
+     | another_app
+           | features
+                - first.feature
+                - second.feature
+                - many_steps.py</pre>
+</div>
+<p>Notice the <tt class="docutils literal"><span class="pre">terrain.py</span></tt> file at the project root, there you can
+populate the <a class="reference internal" href="../reference/terrain.html#lettuce-world"><em>world</em></a> and organize your features and steps
+with it :)</p>
+</div>
+<div class="section" id="lettuce-running-without-http-server">
+<h2>Running without HTTP server<a class="headerlink" href="#lettuce-running-without-http-server" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you may just do not want to run Django&#8217;s built-in HTTP server
+running in background, in those cases all you need to do is run the
+<tt class="docutils literal"><span class="pre">harvest</span></tt> command with the <tt class="docutils literal"><span class="pre">--no-server</span></tt> or <tt class="docutils literal"><span class="pre">-S</span></tt> option.</p>
+<p>Example:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python manage.py harvest --no-server
+python manage.py harvest -S
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-running-the-http-server-in-other-port-than-8000">
+<h2>running the HTTP server in other port than 8000<a class="headerlink" href="#lettuce-running-the-http-server-in-other-port-than-8000" title="Permalink to this headline">¶</a></h2>
+<p>If you face the problem of having lettuce running on port 8000, you
+can change that behaviour.</p>
+<p>Before running the server, lettuce will try to read the setting <tt class="docutils literal"><span class="pre">LETTUCE_SERVER_PORT</span></tt> which <strong>must</strong> be a <strong>integer</strong></p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">LETTUCE_SERVER_PORT</span> <span class="o">=</span> <span class="mi">7000</span>
+</pre></div>
+</div>
+<p>This can be really useful if 7000 is your default development port,
+for example.</p>
+</div>
+<div class="section" id="lettuce-running-the-http-server-with-settings-debug-true">
+<h2>running the HTTP server with settings.DEBUG=True<a class="headerlink" href="#lettuce-running-the-http-server-with-settings-debug-true" title="Permalink to this headline">¶</a></h2>
+<p>In order to run tests against the nearest configuration of production,
+lettuce sets up settings.DEBUG=False</p>
+<p>However, for debug purposes one can face a misleading HTTP 500 error without traceback in Django.
+For those cases lettuce provides the <tt class="docutils literal"><span class="pre">--debug-mode</span></tt> or <tt class="docutils literal"><span class="pre">-d</span></tt> option.</p>
+<div class="highlight-bash"><div class="highlight"><pre>python manage.py harvest --debug-mode
+python manage.py harvest -d
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-running-only-the-specified-scenarios">
+<h2>running only the specified scenarios<a class="headerlink" href="#lettuce-running-only-the-specified-scenarios" title="Permalink to this headline">¶</a></h2>
+<p>You can also specify the index of the scenarios you want to run
+through the command line, to do so, run with <tt class="docutils literal"><span class="pre">--scenarios</span></tt> or <tt class="docutils literal"><span class="pre">-s</span></tt>
+options followed by the scenario numbers separated by commas.</p>
+<p>For example, let&#8217;s say you want to run the scenarios 4, 7, 8 and 10:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python manage.py harvest --scenarios<span class="o">=</span>4,7,8,10
+python manage.py harvest -s 4,7,8,10
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-to-run-or-not-to-run-that-is-the-question">
+<h2>to run or not to run? That is the question!<a class="headerlink" href="#lettuce-to-run-or-not-to-run-that-is-the-question" title="Permalink to this headline">¶</a></h2>
+<p>During your development workflow you may face two situations:</p>
+<div class="section" id="lettuce-running-tests-from-just-certain-apps">
+<h3>running tests from just certain apps<a class="headerlink" href="#lettuce-running-tests-from-just-certain-apps" title="Permalink to this headline">¶</a></h3>
+<p>Lettuce takes a comma-separated list of app names to run tests against.</p>
+<p>For example, the command below would run ONLY the tests within the apps <tt class="docutils literal"><span class="pre">myapp</span></tt> and <tt class="docutils literal"><span class="pre">foobar</span></tt>:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python manage.py harvest --apps<span class="o">=</span>myapp,foobar
+
+<span class="c"># or</span>
+
+python manage.py harvest --a  myapp,foobar
+</pre></div>
+</div>
+<p>You can also specify it at <tt class="docutils literal"><span class="pre">settings.py</span></tt> so that you won&#8217;t need to type the same command-line parameters all the time:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">LETTUCE_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;myapp&#39;</span><span class="p">,</span>
+    <span class="s">&#39;foobar&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+    <span class="s">&#39;my_app&#39;</span><span class="p">,</span>
+    <span class="s">&#39;foobar&#39;</span><span class="p">,</span>
+    <span class="s">&#39;another_app&#39;</span><span class="p">,</span>
+    <span class="s">&#39;lettuce.django&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-running-tests-from-all-apps-except-by-some">
+<h3>running tests from all apps, except by some<a class="headerlink" href="#lettuce-running-tests-from-all-apps-except-by-some" title="Permalink to this headline">¶</a></h3>
+<p>Lettuce takes a comma-separated list of app names which tests must NOT be ran.</p>
+<p>For example, the command below would run ALL the tests BUT those within the apps <tt class="docutils literal"><span class="pre">another_app</span></tt> and <tt class="docutils literal"><span class="pre">foobar</span></tt>:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python manage.py harvest --avoid-apps<span class="o">=</span>another_app,foobar
+</pre></div>
+</div>
+<p>You can also specify it at <tt class="docutils literal"><span class="pre">settings.py</span></tt> so that you won&#8217;t need to type the same command-line parameters all the time:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">LETTUCE_AVOID_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;another_app&#39;</span><span class="p">,</span>
+    <span class="s">&#39;foobar&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+    <span class="s">&#39;my_app&#39;</span><span class="p">,</span>
+    <span class="s">&#39;foobar&#39;</span><span class="p">,</span>
+    <span class="s">&#39;another_app&#39;</span><span class="p">,</span>
+    <span class="s">&#39;lettuce.django&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Web development fun with Lettuce and Django</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting started</a><ul>
+<li><a class="reference internal" href="#install-the-lettuce-django-app">1. install the lettuce django app</a></li>
+<li><a class="reference internal" href="#create-the-feature-directories">2. create the feature directories</a></li>
+<li><a class="reference internal" href="#write-your-first-feature">3. write your first feature</a></li>
+<li><a class="reference internal" href="#run-the-tests">4. run the tests</a></li>
+<li><a class="reference internal" href="#specifying-feature-files">5. specifying feature files</a></li>
+<li><a class="reference internal" href="#grab-actual-example-code">6. grab actual example code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#technical-details">Technical details</a><ul>
+<li><a class="reference internal" href="#red-tape-less-builtin-server">red-tape-less builtin server</a></li>
+<li><a class="reference internal" href="#figure-out-django-urls">figure out django urls</a><ul>
+<li><a class="reference internal" href="#what-does-django-url-do">what does <tt class="docutils literal"><span class="pre">django_url</span></tt> do ?!?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#terrain-also-available-in-django-projects">terrain also available in django projects</a></li>
+<li><a class="reference internal" href="#running-without-http-server">Running without HTTP server</a></li>
+<li><a class="reference internal" href="#running-the-http-server-in-other-port-than-8000">running the HTTP server in other port than 8000</a></li>
+<li><a class="reference internal" href="#running-the-http-server-with-settings-debug-true">running the HTTP server with settings.DEBUG=True</a></li>
+<li><a class="reference internal" href="#running-only-the-specified-scenarios">running only the specified scenarios</a></li>
+<li><a class="reference internal" href="#to-run-or-not-to-run-that-is-the-question">to run or not to run? That is the question!</a><ul>
+<li><a class="reference internal" href="#running-tests-from-just-certain-apps">running tests from just certain apps</a></li>
+<li><a class="reference internal" href="#running-tests-from-all-apps-except-by-some">running tests from all apps, except by some</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="nose.html">Lettuce recipe: Using nose for pretty assertions</a></li>
+    
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>Web development fun with Lettuce and Django</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/recipes/django-lxml.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="nose.html" title="Lettuce recipe: Using nose for pretty assertions">previous</a>
+     |</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

@@ -1,0 +1,497 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>introduction &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="handling data with tables" href="tables.html" />
+    <link rel="prev" title="What the f** eature ?" href="../intro/wtf.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="../intro/wtf.html" title="What the f** eature ?">previous</a>
+     |
+   |
+    <a href="tables.html" title="handling data with tables">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="tutorial-simple">
+            
+  <div class="section" id="lettuce-introduction">
+<span id="lettuce-tutorial-simple"></span><h1>introduction<a class="headerlink" href="#lettuce-introduction" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://lettuce.it">Lettuce</a> is an extremely useful and charming tool for <a class="reference external" href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">BDD</a> (Behavior
+Driven Development). It can execute plain-text functional descriptions
+as automated tests for <a class="reference external" href="http://python.org">Python</a> projects, just as <a class="reference external" href="http://cukes.info">Cucumber</a> does for
+<a class="reference external" href="http://ruby-lang.org/">Ruby</a>.</p>
+<p><a class="reference external" href="http://lettuce.it">Lettuce</a> makes the development and testing process really easy,
+scalable, readable and - what is best - it allows someone who doesn&#8217;t
+program to describe the behavior of a certain system, without
+imagining those descriptions will automatically test the system during
+its development.</p>
+<img alt="../_images/flow.png" src="../_images/flow.png" />
+</div>
+<div class="section" id="lettuce-get-lettuce">
+<h1>get lettuce<a class="headerlink" href="#lettuce-get-lettuce" title="Permalink to this headline">¶</a></h1>
+<p>Make sure you&#8217;ve got Python installed and then run from the terminal:</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~<span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip install lettuce
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-define-a-problem">
+<h1>define a problem<a class="headerlink" href="#lettuce-define-a-problem" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s choose a problem to lettuce:
+<strong>Given a number, what is its factorial?</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The factorial of a positive integer n, denoted by n!, is the
+product of all positive integers less than or equal to n. The
+factorial of 0 is 1</p>
+</div>
+</div>
+<div class="section" id="lettuce-project-structure">
+<h1>project structure<a class="headerlink" href="#lettuce-project-structure" title="Permalink to this headline">¶</a></h1>
+<p>Build the directory tree bellow such as the files <tt class="docutils literal"><span class="pre">zero.feature</span></tt> and <tt class="docutils literal"><span class="pre">steps.py</span></tt> are empty.</p>
+<div class="highlight-bash"><div class="highlight"><pre>/home/user/projects/mymath
+     | tests
+           | features
+                - zero.feature
+                - steps.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-lettuce-it">
+<h1>lettuce it!<a class="headerlink" href="#lettuce-lettuce-it" title="Permalink to this headline">¶</a></h1>
+<p>Lets begin to describe and solve our problem...</p>
+<div class="section" id="lettuce-first-round">
+<h2>first round<a class="headerlink" href="#lettuce-first-round" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="lettuce-a-describe-behaviour">
+<h3>[a] describe behaviour<a class="headerlink" href="#lettuce-a-describe-behaviour" title="Permalink to this headline">¶</a></h3>
+<p>Start describing the expected behaviour of factorial in <tt class="docutils literal"><span class="pre">zero.feature</span></tt> using English:</p>
+<div class="highlight-ruby"><pre>Feature: Compute factorial
+    In order to play with Lettuce
+    As beginners
+    We'll implement factorial
+
+    Scenario: Factorial of 0
+        Given I have the number 0
+        When I compute its factorial
+        Then I see the number 1</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">zero.feature must be inside features directory and its extension must
+be .feature. However, you&#8217;re free to choose its name.</p>
+</div>
+</div>
+<div class="section" id="lettuce-b-define-steps-in-python">
+<h3>[b] define steps in python<a class="headerlink" href="#lettuce-b-define-steps-in-python" title="Permalink to this headline">¶</a></h3>
+<p>Now let&#8217;s define the steps of the scenario, so Lettuce can
+understand the behaviour description. Create the <tt class="docutils literal"><span class="pre">steps.py</span></tt> file which will contain
+python code describing the steps.</p>
+<p>Python:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I have the number (\d+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">have_the_number</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I compute its factorial&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">compute_its_factorial</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">factorial</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I see the number (\d+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_number</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="n">expected</span><span class="p">,</span> \
+        <span class="s">&quot;Got </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">world</span><span class="o">.</span><span class="n">number</span>
+
+<span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">steps.py</span></tt> must be inside features directory, but the names doesn&#8217;t
+need to be <tt class="docutils literal"><span class="pre">steps.py</span></tt> it can be any python file with a <tt class="docutils literal"><span class="pre">.py</span></tt> extension.
+<a class="reference external" href="http://lettuce.it">Lettuce</a> will look for python files recursively within features
+dir.</p>
+</div>
+<p>Ideally, factorial will be defined somewhere else. However, as this is
+just a first example, we&#8217;ll implement it inside steps.py, so you get
+the idea of how to use Lettuce.</p>
+<p><strong>Notice that, until now, we haven&#8217;t defined the factorial function (it&#8217;s returning -1).</strong></p>
+</div>
+<div class="section" id="lettuce-c-run-and-watch-it-fail">
+<h3>[c] run and watch it fail<a class="headerlink" href="#lettuce-c-run-and-watch-it-fail" title="Permalink to this headline">¶</a></h3>
+<p>Go to the tests directory and run from the terminal:</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/projects/mymath/tests<span class="nv">$ </span>lettuce
+</pre></div>
+</div>
+<p>As you haven&#8217;t implemented factorial, it is no surprise the behavior
+won&#8217;t be reached:</p>
+<img alt="../_images/screenshot1.png" src="../_images/screenshot1.png" />
+<p>Our only scenario failed :(
+Let&#8217;s solve it...</p>
+</div>
+<div class="section" id="lettuce-d-write-code-to-make-it-pass">
+<h3>[d] write code to make it pass<a class="headerlink" href="#lettuce-d-write-code-to-make-it-pass" title="Permalink to this headline">¶</a></h3>
+<p>Well, by definition, we know that the factorial of 0 is 1. As our only
+feature is this... we could force factorial to return 1.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I have the number (\d+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">have_the_number</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I compute its factorial&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">compute_its_factorial</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">factorial</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I see the number (\d+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_number</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="n">expected</span><span class="p">,</span> \
+        <span class="s">&quot;Got </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">world</span><span class="o">.</span><span class="n">number</span>
+
+<span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-e-run-again-and-watch-it-pass">
+<h3>[e] run again and watch it pass<a class="headerlink" href="#lettuce-e-run-again-and-watch-it-pass" title="Permalink to this headline">¶</a></h3>
+<p>Again, run from the terminal:</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/projects/mymath/tests<span class="nv">$ </span>lettuce
+</pre></div>
+</div>
+<p>And you&#8217;ll be happy to see your factorial implementation passed all the behaviours expected:</p>
+<img alt="../_images/screenshot2.png" src="../_images/screenshot2.png" />
+<p>Great! :)</p>
+<p>However, one test is not enough for checking the quality of our
+solution... So let&#8217;s lettuce it again!</p>
+</div>
+</div>
+<div class="section" id="lettuce-second-round">
+<h2>second round<a class="headerlink" href="#lettuce-second-round" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s provide more tests so our problem is better described, and so we
+provide a more accurate implementation of factorial:</p>
+<div class="section" id="lettuce-id1">
+<h3>[a] describe behaviour<a class="headerlink" href="#lettuce-id1" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s provide two new scenarios, for numbers 1 and 2:</p>
+<div class="highlight-ruby"><pre>Feature: Compute factorial
+  In order to play with Lettuce
+  As beginners
+  We'll implement factorial
+
+  Scenario: Factorial of 0
+    Given I have the number 0
+    When I compute its factorial
+    Then I see the number 1
+
+  Scenario: Factorial of 1
+    Given I have the number 1
+    When I compute its factorial
+    Then I see the number 1
+
+  Scenario: Factorial of 2
+    Given I have the number 2
+    When I compute its factorial
+    Then I see the number 2</pre>
+</div>
+</div>
+<div class="section" id="lettuce-id2">
+<h3>[b] define steps in python<a class="headerlink" href="#lettuce-id2" title="Permalink to this headline">¶</a></h3>
+<p>As we haven&#8217;t changed the definition, no need to make changes on this
+step.</p>
+</div>
+<div class="section" id="lettuce-id3">
+<h3>[c] run and watch it fail<a class="headerlink" href="#lettuce-id3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/projects/mymath/tests<span class="nv">$ </span>lettuce
+</pre></div>
+</div>
+<p>When running Lettuce we realize that our previous implementation of
+factorial works fine both for 0 and for 1, but not for 2 - it
+fails. :(</p>
+<img alt="../_images/screenshot3.png" src="../_images/screenshot3.png" />
+</div>
+<div class="section" id="lettuce-id4">
+<h3>[d] write code to make it pass<a class="headerlink" href="#lettuce-id4" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s provide a solution so we get the right factorial for all
+scenarios, specially for number 2:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I have the number (\d+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">have_the_number</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I compute its factorial&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">compute_its_factorial</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">factorial</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I see the number (\d+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_number</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="n">expected</span><span class="p">,</span> \
+        <span class="s">&quot;Got </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">world</span><span class="o">.</span><span class="n">number</span>
+
+<span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">number</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">number</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">number</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-id5">
+<h3>[e] run again and watch it pass<a class="headerlink" href="#lettuce-id5" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/projects/mymath/tests<span class="nv">$ </span>lettuce
+</pre></div>
+</div>
+<img alt="../_images/screenshot4.png" src="../_images/screenshot4.png" />
+<p>Great! Three scenarios described and they are alright!</p>
+</div>
+</div>
+<div class="section" id="lettuce-third-round">
+<h2>third round<a class="headerlink" href="#lettuce-third-round" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s provide more tests so our problem is better described and we get
+new errors so we&#8217;ll be able to solve them.</p>
+<div class="section" id="lettuce-id6">
+<h3>[a] describe behaviour<a class="headerlink" href="#lettuce-id6" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ruby"><pre>Feature: Compute factorial
+  In order to play with Lettuce
+  As beginners
+  We'll implement factorial
+
+  Scenario: Factorial of 0
+    Given I have the number 0
+    When I compute its factorial
+    Then I see the number 1
+
+  Scenario: Factorial of 1
+    Given I have the number 1
+    When I compute its factorial
+    Then I see the number 1
+
+  Scenario: Factorial of 2
+    Given I have the number 2
+    When I compute its factorial
+    Then I see the number 2
+
+  Scenario: Factorial of 3
+    Given I have the number 3
+    When I compute its factorial
+    Then I see the number 6
+
+  Scenario: Factorial of 4
+    Given I have the number 4
+    When I compute its factorial
+    Then I see the number 24</pre>
+</div>
+</div>
+<div class="section" id="lettuce-id7">
+<h3>[b] define steps in python<a class="headerlink" href="#lettuce-id7" title="Permalink to this headline">¶</a></h3>
+<p>As we haven&#8217;t changed the definition, no need to make changes on this
+step.</p>
+</div>
+<div class="section" id="lettuce-id8">
+<h3>[c] run and watch it fail<a class="headerlink" href="#lettuce-id8" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/projects/mymath/tests<span class="nv">$ </span>lettuce
+</pre></div>
+</div>
+<img alt="../_images/screenshot5.png" src="../_images/screenshot5.png" />
+</div>
+<div class="section" id="lettuce-id9">
+<h3>[d] write code to make it pass<a class="headerlink" href="#lettuce-id9" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I have the number (\d+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">have_the_number</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I compute its factorial&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">compute_its_factorial</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">factorial</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I see the number (\d+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_number</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">world</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="n">expected</span><span class="p">,</span> \
+        <span class="s">&quot;Got </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">world</span><span class="o">.</span><span class="n">number</span>
+
+<span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">number</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">number</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">number</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">number</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-id10">
+<h3>[e] run again and watch it pass<a class="headerlink" href="#lettuce-id10" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/projects/mymath/tests<span class="nv">$ </span>lettuce
+</pre></div>
+</div>
+<img alt="../_images/screenshot6.png" src="../_images/screenshot6.png" />
+</div>
+</div>
+<div class="section" id="lettuce-forth-round">
+<h2>forth round<a class="headerlink" href="#lettuce-forth-round" title="Permalink to this headline">¶</a></h2>
+<p>All steps should be repeated as long as you can keep doing them - the
+quality of your software depends on these.</p>
+<p>Have a nice lettuce...! ;)</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">introduction</a></li>
+<li><a class="reference internal" href="#get-lettuce">get lettuce</a></li>
+<li><a class="reference internal" href="#define-a-problem">define a problem</a></li>
+<li><a class="reference internal" href="#project-structure">project structure</a></li>
+<li><a class="reference internal" href="#lettuce-it">lettuce it!</a><ul>
+<li><a class="reference internal" href="#first-round">first round</a><ul>
+<li><a class="reference internal" href="#a-describe-behaviour">[a] describe behaviour</a></li>
+<li><a class="reference internal" href="#b-define-steps-in-python">[b] define steps in python</a></li>
+<li><a class="reference internal" href="#c-run-and-watch-it-fail">[c] run and watch it fail</a></li>
+<li><a class="reference internal" href="#d-write-code-to-make-it-pass">[d] write code to make it pass</a></li>
+<li><a class="reference internal" href="#e-run-again-and-watch-it-pass">[e] run again and watch it pass</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#second-round">second round</a><ul>
+<li><a class="reference internal" href="#id1">[a] describe behaviour</a></li>
+<li><a class="reference internal" href="#id2">[b] define steps in python</a></li>
+<li><a class="reference internal" href="#id3">[c] run and watch it fail</a></li>
+<li><a class="reference internal" href="#id4">[d] write code to make it pass</a></li>
+<li><a class="reference internal" href="#id5">[e] run again and watch it pass</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#third-round">third round</a><ul>
+<li><a class="reference internal" href="#id6">[a] describe behaviour</a></li>
+<li><a class="reference internal" href="#id7">[b] define steps in python</a></li>
+<li><a class="reference internal" href="#id8">[c] run and watch it fail</a></li>
+<li><a class="reference internal" href="#id9">[d] write code to make it pass</a></li>
+<li><a class="reference internal" href="#id10">[e] run again and watch it pass</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#forth-round">forth round</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="../intro/wtf.html">What the f** eature ?</a></li>
+    
+    
+      <li>Next: <a href="tables.html">handling data with tables</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>introduction</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tutorial/simple.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="../intro/wtf.html" title="What the f** eature ?">previous</a>
+     |
+   |
+    <a href="tables.html" title="handling data with tables">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

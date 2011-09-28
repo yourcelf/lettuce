@@ -1,0 +1,162 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Lettuce recipe: Using nose for pretty assertions &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="Web development fun with Lettuce and Django" href="django-lxml.html" />
+    <link rel="prev" title="language support" href="../reference/languages.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="../reference/languages.html" title="language support">previous</a>
+     |
+   |
+    <a href="django-lxml.html" title="Web development fun with Lettuce and Django">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="recipes-nose">
+            
+  <div class="section" id="lettuce-lettuce-recipe-using-nose-for-pretty-assertions">
+<span id="lettuce-recipes-nose"></span><h1>Lettuce recipe: Using nose for pretty assertions<a class="headerlink" href="#lettuce-lettuce-recipe-using-nose-for-pretty-assertions" title="Permalink to this headline">¶</a></h1>
+<p>Lettuce uses python&#8217;s builtin exception <tt class="xref py py-exc docutils literal"><span class="pre">AssertionError</span></tt> to mark
+tests as failed.</p>
+<p>Although in order to describe the assertion with a custom string you
+would need to do something like:</p>
+<div class="highlight-python"><pre>from lettuce import step
+
+@step('some step with "(.*)"'):
+def some_step(step, from):
+    assert from == 'expectation', \
+        "Ooops, '%s' should be equal 'expectation', but isn't" % from</pre>
+</div>
+<p><a class="reference external" href="http://code.google.com/p/python-nose/">nose</a> is a python module that provides a set of assert functions that
+already have a nice description, and fortunately it still uses
+<tt class="xref py py-exc docutils literal"><span class="pre">AssertionError</span></tt>, which makes <a class="reference external" href="http://code.google.com/p/python-nose/">nose</a> totally compliant with
+lettuce.</p>
+<p>The example below shows how the step above could be written taking advantage of <a class="reference external" href="http://code.google.com/p/python-nose/">nose</a>:</p>
+<div class="highlight-python"><pre>from lettuce import step
+from nose.tools import assert_equals
+
+@step('some step with "(.*)"'):
+def some_step(step, from):
+    assert_equals(from, 'expectation')</pre>
+</div>
+<p>It rocks, huh?!</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="../reference/languages.html">language support</a></li>
+    
+    
+      <li>Next: <a href="django-lxml.html">Web development fun with Lettuce and Django</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>Lettuce recipe: Using nose for pretty assertions</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/recipes/nose.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="../reference/languages.html" title="language support">previous</a>
+     |
+   |
+    <a href="django-lxml.html" title="Web development fun with Lettuce and Django">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

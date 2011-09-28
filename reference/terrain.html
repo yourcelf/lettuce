@@ -1,0 +1,545 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>the “terrain” &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="language support" href="languages.html" />
+    <link rel="prev" title="features, scenarios and steps reference" href="features.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="features.html" title="features, scenarios and steps reference">previous</a>
+     |
+   |
+    <a href="languages.html" title="language support">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="reference-terrain">
+            
+  <div class="section" id="lettuce-the-terrain">
+<span id="lettuce-reference-terrain"></span><h1>the &#8220;terrain&#8221;<a class="headerlink" href="#lettuce-the-terrain" title="Permalink to this headline">¶</a></h1>
+<p>Terrain is a &#8220;pun&#8221; with lettuce and its &#8220;living place&#8221;, its about
+setup and teardown, and general hacking on your lettuce tests.</p>
+<div class="section" id="lettuce-terrain-py">
+<span id="lettuce-id1"></span><h2>terrain.py<a class="headerlink" href="#lettuce-terrain-py" title="Permalink to this headline">¶</a></h2>
+<p>By convention lettuce tries do load a file called <tt class="docutils literal"><span class="pre">terrain.py</span></tt> located
+at the current directory.</p>
+<p>Think at this file as a global setup place, there you can setup global
+hooks, and put things into lettuce &#8220;world&#8221;.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can also set a <tt class="docutils literal"><span class="pre">terrain.py</span></tt> file within the root of your
+<a class="reference external" href="http://djangoproject.com/">Django</a> project, when running the <tt class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">harvest</span></tt>
+command, lettuce will load it. See more at
+<a class="reference internal" href="../tutorial/django.html#the-django-command"><em>the django command</em></a>.</p>
+</div>
+<div class="section" id="lettuce-in-practice">
+<h3>in practice<a class="headerlink" href="#lettuce-in-practice" title="Permalink to this headline">¶</a></h3>
+<p>Try out this file layout:</p>
+<div class="highlight-bash"><div class="highlight"><pre>/home/user/projects/some-project
+       | features
+            - the-name-of-my-test.feature
+            - the-file-which-holds-step-definitions.py
+            - terrain.py
+</pre></div>
+</div>
+<p>Then add some setup at <tt class="docutils literal"><span class="pre">terrain.py</span></tt> and run lettuce</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/projects/some-project<span class="nv">$ </span>lettuce
+</pre></div>
+</div>
+<p>And notice <tt class="docutils literal"><span class="pre">terrain.py</span></tt> will be loaded before anything</p>
+</div>
+</div>
+<div class="section" id="lettuce-world">
+<span id="lettuce-lettuce-world"></span><h2>world<a class="headerlink" href="#lettuce-world" title="Permalink to this headline">¶</a></h2>
+<p>For the sake of turning easier and funnier to write tests, lettuce
+&#8220;violates&#8221; some principles of good design in python, such as avoiding
+implicity and using global stuff.</p>
+<p>The &#8220;world&#8221; concept of lettuce is mostly about &#8220;global stuff&#8221;.</p>
+<div class="section" id="lettuce-id2">
+<h3>in practice<a class="headerlink" href="#lettuce-id2" title="Permalink to this headline">¶</a></h3>
+<p>Imagine a file located somewhere that will be imported by your
+application before lettuce start running tests:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="n">world</span>
+
+<span class="n">world</span><span class="o">.</span><span class="n">some_variable</span> <span class="o">=</span> <span class="s">&quot;yay!&quot;</span>
+</pre></div>
+</div>
+<p>So that, within some step file you could use things previously set on <tt class="docutils literal"><span class="pre">world</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">r&#39;exemplify &quot;world&quot; by seeing that some variable contains &quot;(.*)&quot;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">exemplify_world</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">world</span><span class="o">.</span><span class="n">some_variable</span> <span class="o">==</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>And the feature could have something like:</p>
+<div class="highlight-ruby"><pre>Feature: test lettuce's world
+  Scenario: check variable
+    When I exemplify "world" by seeing that some variable contains "yay!"</pre>
+</div>
+</div>
+<div class="section" id="lettuce-world-absorb">
+<h3>world.absorb<a class="headerlink" href="#lettuce-world-absorb" title="Permalink to this headline">¶</a></h3>
+<p>It can be really useful to put functions and/or classes in <strong>lettuce.world</strong></p>
+<p>For example:</p>
+<div class="highlight-python"><pre>from lettuce import world
+
+def my_project_wide_function():
+    # do something
+
+world.my_project_wide_function = my_project_wide_function
+
+world.my_project_wide_function()</pre>
+</div>
+<p>But as you can notice, as your project grows, there can be a lot of
+repetitive lines, not DRY at all :(</p>
+<p>In order to avoid that, lettuce provides a &#8220;absorb&#8221; decorator that lives within &#8220;world&#8221;</p>
+<p>Let&#8217;s see it in action:</p>
+<div class="highlight-python"><pre>from lettuce import world
+
+@world.absorb
+def my_project_wide_function():
+    # do something
+
+world.my_project_wide_function()</pre>
+</div>
+<p>You can also use it with classes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="n">world</span>
+
+<span class="nd">@world.absorb</span>
+<span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">MyClass</span><span class="p">(),</span> <span class="n">MyClass</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And even with lambdas, <strong>but in this case you need to name it</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="n">world</span>
+
+<span class="n">world</span><span class="o">.</span><span class="n">absorb</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s">&quot;yeah&quot;</span><span class="p">,</span> <span class="s">&quot;optimist_function&quot;</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">world</span><span class="o">.</span><span class="n">optimist_function</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;yeah&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-world-spew">
+<h3>world.spew<a class="headerlink" href="#lettuce-world-spew" title="Permalink to this headline">¶</a></h3>
+<p>Well, if you read the topic above, you may be guessing: &#8220;if I keep
+stashing things in lettuce.world, it may bloat it sometime, or confuse
+member names along my steps, or hooks.</p>
+<p>For those cases after <strong>&#8220;absorbing&#8221;</strong> something, world can also <strong>&#8220;spew&#8221;</strong> it.</p>
+<div class="highlight-python"><pre>from lettuce import world
+
+@world.absorb
+def generic_function():
+    # do something
+
+assert hasattr(world, 'generic_function')
+
+world.spew('generic_function')
+
+assert not hasattr(world, 'generic_function')</pre>
+</div>
+</div>
+</div>
+<div class="section" id="lettuce-hooks">
+<h2>hooks<a class="headerlink" href="#lettuce-hooks" title="Permalink to this headline">¶</a></h2>
+<p>Lettuce has hooks that are called sequentially before and after each
+action</p>
+<p>Presented as python decorators, it can be used to take any actions you find useful.</p>
+<p>For example, you can set a browser driver at <a class="reference internal" href="#lettuce-world"><em>world</em></a>, and
+close the connection after all, populate database with test mass or
+anything you want, for example</p>
+<p>Let&#8217;s see it from outside in</p>
+<div class="section" id="lettuce-before-all">
+<h3>&#64;before.all<a class="headerlink" href="#lettuce-before-all" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran before lettuce look for and load feature files</p>
+<p>The decorated function takes <strong>NO</strong> parameters</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@before.all</span>
+<span class="k">def</span> <span class="nf">say_hello</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;Hello there!&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;Lettuce will start to run tests right now...&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-after-all">
+<h3>&#64;after.all<a class="headerlink" href="#lettuce-after-all" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran after lettuce run all features, scenarios and
+steps</p>
+<p>The decorated function takes a <a class="reference internal" href="features.html#total-result"><em>TotalResult</em></a> as parameter, so
+that you can use the result statistics somehow</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@after.all</span>
+<span class="k">def</span> <span class="nf">say_goodbye</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;Congratulations, </span><span class="si">%d</span><span class="s"> of </span><span class="si">%d</span><span class="s"> scenarios passed!&quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">total</span><span class="o">.</span><span class="n">scenarios_ran</span><span class="p">,</span>
+        <span class="n">total</span><span class="o">.</span><span class="n">scenarios_passed</span>
+    <span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;Goodbye!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-before-each-feature">
+<h3>&#64;before.each_feature<a class="headerlink" href="#lettuce-before-each-feature" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran before lettuce run each feature</p>
+<p>The decorated function takes a <a class="reference internal" href="features.html#feature-class"><em>Feature</em></a> as parameter, so
+that you can use it to fetch scenarios and steps inside.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@before.each_feature</span>
+<span class="k">def</span> <span class="nf">setup_some_feature</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;Running the feature </span><span class="si">%r</span><span class="s">, at file </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">feature</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">feature</span><span class="o">.</span><span class="n">described_at</span><span class="o">.</span><span class="n">file</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-after-each-feature">
+<h3>&#64;after.each_feature<a class="headerlink" href="#lettuce-after-each-feature" title="Permalink to this headline">¶</a></h3>
+<p>This hooks behaves in the same way &#64;before.each_feature does, except
+by the fact that its ran <em>after</em> lettuce run the feature.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@after.each_feature</span>
+<span class="k">def</span> <span class="nf">teardown_some_feature</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;The feature </span><span class="si">%r</span><span class="s"> just has just ran&quot;</span> <span class="o">%</span> <span class="n">feature</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-before-each-scenario">
+<h3>&#64;before.each_scenario<a class="headerlink" href="#lettuce-before-each-scenario" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran before lettuce run each scenario</p>
+<p>The decorated function takes a <a class="reference internal" href="features.html#scenario-class"><em>Scenario</em></a> as parameter, so
+that you can use it to fetch steps inside.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fixtures</span> <span class="kn">import</span> <span class="n">populate_test_database</span>
+
+<span class="nd">@before.each_scenario</span>
+<span class="k">def</span> <span class="nf">setup_some_scenario</span><span class="p">(</span><span class="n">scenario</span><span class="p">):</span>
+    <span class="n">populate_test_database</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-after-each-scenario">
+<h3>&#64;after.each_scenario<a class="headerlink" href="#lettuce-after-each-scenario" title="Permalink to this headline">¶</a></h3>
+<p>This hooks behaves in the same way &#64;before.each_scenario does, except
+by the fact that its ran <em>after</em> lettuce run the scenario.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">database</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="nd">@after.each_scenario</span>
+<span class="k">def</span> <span class="nf">teardown_some_scenario</span><span class="p">(</span><span class="n">scenario</span><span class="p">):</span>
+    <span class="n">models</span><span class="o">.</span><span class="n">reset_all_data</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-before-each-step">
+<h3>&#64;before.each_step<a class="headerlink" href="#lettuce-before-each-step" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran before lettuce run each step</p>
+<p>The decorated function takes a <a class="reference internal" href="features.html#step-class"><em>Step</em></a> as parameter, so
+that you can use it to fetch tables and so.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@before.each_step</span>
+<span class="k">def</span> <span class="nf">setup_some_step</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;running step </span><span class="si">%r</span><span class="s">, defined at </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">step</span><span class="o">.</span><span class="n">sentence</span><span class="p">,</span>
+        <span class="n">step</span><span class="o">.</span><span class="n">defined_at</span><span class="o">.</span><span class="n">file</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-after-each-step">
+<h3>&#64;after.each_step<a class="headerlink" href="#lettuce-after-each-step" title="Permalink to this headline">¶</a></h3>
+<p>This hooks behaves in the same way &#64;before.each_step does, except
+by the fact that its ran <em>after</em> lettuce run the step.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@after.each_step</span>
+<span class="k">def</span> <span class="nf">teardown_some_step</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">step</span><span class="o">.</span><span class="n">hashes</span><span class="p">:</span>
+       <span class="k">print</span> <span class="s">&quot;no tables in the step&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="lettuce-django-specific-hooks">
+<h2>django-specific hooks<a class="headerlink" href="#lettuce-django-specific-hooks" title="Permalink to this headline">¶</a></h2>
+<p>Since lettuce officially supports <a class="reference external" href="http://djangoproject.com/">Django</a>, there are a few specific hooks that help on setting up your test suite on it.</p>
+<div class="section" id="lettuce-before-harvest">
+<h3>&#64;before.harvest<a class="headerlink" href="#lettuce-before-harvest" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran before lettuce start harvesting your Django tests. It
+can be very useful for setting up browser drivers (such as selenium),
+before all tests start to run on Django.</p>
+<p>The decorated function takes a dict with the local variables within
+the <tt class="docutils literal"><span class="pre">harvest</span></tt> management command.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">lettuce.django</span> <span class="kn">import</span> <span class="n">django_url</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">selenium</span>
+
+<span class="nd">@before.harvest</span>
+<span class="k">def</span> <span class="nf">prepare_browser_driver</span><span class="p">(</span><span class="n">variables</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">variables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;run_server&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">selenium</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">4444</span><span class="p">,</span> <span class="s">&#39;*firefox&#39;</span><span class="p">,</span> <span class="n">django_url</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">))</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-after-harvest">
+<h3>&#64;after.harvest<a class="headerlink" href="#lettuce-after-harvest" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran right after lettuce finish harvesting your Django
+tests. It can be very useful for shutting down previously started
+browser drivers (see the example above).</p>
+<p>The decorated function takes a list of <a class="reference internal" href="features.html#total-result"><em>TotalResult</em></a> objects.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@after.harvest</span>
+<span class="k">def</span> <span class="nf">shutdown_browser_driver</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-before-each-app">
+<h3>&#64;before.each_app<a class="headerlink" href="#lettuce-before-each-app" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran before lettuce run each <a class="reference external" href="http://djangoproject.com/">Django</a> app.</p>
+<p>The decorated function takes the python module that corresponds to the current app.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@before.each_app</span>
+<span class="k">def</span> <span class="nf">populate_blog_database</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;blog&#39;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Post</span>
+        <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Nice example&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s">&#39;I like writting!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-after-each-app">
+<h3>&#64;after.each_app<a class="headerlink" href="#lettuce-after-each-app" title="Permalink to this headline">¶</a></h3>
+<p>This hook is ran after lettuce run each <a class="reference external" href="http://djangoproject.com/">Django</a> app.</p>
+<p>The decorated function takes two arguments:</p>
+<ul class="simple">
+<li>the python module that corresponds to the current app.</li>
+<li>a <a class="reference internal" href="features.html#total-result"><em>TotalResult</em></a> as parameter, so that you can use the result
+statistics somehow</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nd">@after.each_app</span>
+<span class="k">def</span> <span class="nf">clear_blog_database_if_successful</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;blog&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">scenarios_ran</span> <span class="ow">is</span> <span class="n">result</span><span class="o">.</span><span class="n">scenarios_passed</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Post</span><span class="p">,</span> <span class="n">Comment</span>
+            <span class="n">Comment</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+            <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-before-runserver-and-after-runserver">
+<h3>&#64;before.runserver and &#64;after.runserver<a class="headerlink" href="#lettuce-before-runserver-and-after-runserver" title="Permalink to this headline">¶</a></h3>
+<p>These hooks are ran right before, and after lettuce starts up the built-in http server.</p>
+<p>The decorated function takes a <tt class="docutils literal"><span class="pre">lettuce.django.server.ThreadedServer</span></tt> object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">django.core.servers.basehttp</span> <span class="kn">import</span> <span class="n">WSGIServer</span>
+
+<span class="nd">@before.runserver</span>
+<span class="k">def</span> <span class="nf">prepare_database</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">WSGIServer</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">mydatabase</span>
+    <span class="n">mydatabase</span><span class="o">.</span><span class="n">prepare</span><span class="p">()</span>
+
+<span class="nd">@after.runserver</span>
+<span class="k">def</span> <span class="nf">say_goodbye</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">WSGIServer</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;goodbye, see you soon&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-before-handle-request-and-after-handle-request">
+<h3>&#64;before.handle_request and &#64;after.handle_request<a class="headerlink" href="#lettuce-before-handle-request-and-after-handle-request" title="Permalink to this headline">¶</a></h3>
+<p>These hooks are ran right before, and after lettuce&#8217;s built-in HTTP server responds to a request.</p>
+<p>Both decorated functions takes these two arguments:</p>
+<ul class="simple">
+<li>a <tt class="docutils literal"><span class="pre">django.core.servers.basehttp.WSGIServer</span></tt> object.</li>
+<li>a <tt class="docutils literal"><span class="pre">lettuce.django.server.ThreadedServer</span></tt> object.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">django.core.servers.basehttp</span> <span class="kn">import</span> <span class="n">WSGIServer</span>
+
+<span class="nd">@before.handle_request</span>
+<span class="k">def</span> <span class="nf">print_request</span><span class="p">(</span><span class="n">httpd</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+    <span class="n">socket_object</span><span class="p">,</span> <span class="p">(</span><span class="n">client_address</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="o">=</span> <span class="n">httpd</span><span class="o">.</span><span class="n">get_request</span><span class="p">()</span>
+    <span class="k">print</span> <span class="n">socket_object</span><span class="o">.</span><span class="n">dup</span><span class="p">()</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+
+<span class="nd">@after.handle_request</span>
+<span class="k">def</span> <span class="nf">say_goodbye</span><span class="p">(</span><span class="n">httpd</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+    <span class="n">socket_object</span><span class="p">,</span> <span class="p">(</span><span class="n">client_address</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="o">=</span> <span class="n">httpd</span><span class="o">.</span><span class="n">get_request</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;I&#39;ve just finished to respond to the client </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">client_address</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">all the <tt class="docutils literal"><span class="pre">handle_request</span></tt> hooks are run within a python
+thread. If something went wrong within a calback, lettuce can get
+stuck.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">the &#8220;terrain&#8221;</a><ul>
+<li><a class="reference internal" href="#terrain-py">terrain.py</a><ul>
+<li><a class="reference internal" href="#in-practice">in practice</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#world">world</a><ul>
+<li><a class="reference internal" href="#id2">in practice</a></li>
+<li><a class="reference internal" href="#world-absorb">world.absorb</a></li>
+<li><a class="reference internal" href="#world-spew">world.spew</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hooks">hooks</a><ul>
+<li><a class="reference internal" href="#before-all">&#64;before.all</a></li>
+<li><a class="reference internal" href="#after-all">&#64;after.all</a></li>
+<li><a class="reference internal" href="#before-each-feature">&#64;before.each_feature</a></li>
+<li><a class="reference internal" href="#after-each-feature">&#64;after.each_feature</a></li>
+<li><a class="reference internal" href="#before-each-scenario">&#64;before.each_scenario</a></li>
+<li><a class="reference internal" href="#after-each-scenario">&#64;after.each_scenario</a></li>
+<li><a class="reference internal" href="#before-each-step">&#64;before.each_step</a></li>
+<li><a class="reference internal" href="#after-each-step">&#64;after.each_step</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#django-specific-hooks">django-specific hooks</a><ul>
+<li><a class="reference internal" href="#before-harvest">&#64;before.harvest</a></li>
+<li><a class="reference internal" href="#after-harvest">&#64;after.harvest</a></li>
+<li><a class="reference internal" href="#before-each-app">&#64;before.each_app</a></li>
+<li><a class="reference internal" href="#after-each-app">&#64;after.each_app</a></li>
+<li><a class="reference internal" href="#before-runserver-and-after-runserver">&#64;before.runserver and &#64;after.runserver</a></li>
+<li><a class="reference internal" href="#before-handle-request-and-after-handle-request">&#64;before.handle_request and &#64;after.handle_request</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="features.html">features, scenarios and steps reference</a></li>
+    
+    
+      <li>Next: <a href="languages.html">language support</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>the &#8220;terrain&#8221;</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/terrain.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="features.html" title="features, scenarios and steps reference">previous</a>
+     |
+   |
+    <a href="languages.html" title="language support">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

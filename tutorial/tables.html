@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>handling data with tables &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="multi-line strings" href="multiline.html" />
+    <link rel="prev" title="introduction" href="simple.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="simple.html" title="introduction">previous</a>
+     |
+   |
+    <a href="multiline.html" title="multi-line strings">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="tutorial-tables">
+            
+  <div class="section" id="lettuce-handling-data-with-tables">
+<span id="lettuce-tutorial-tables"></span><h1>handling data with tables<a class="headerlink" href="#lettuce-handling-data-with-tables" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s imagine writing a MVC application. While writing the tests
+you will stumble in to a situation where there is a few models
+that must be added to the database, maybe you will also need to check
+the new state of those models.</p>
+<p>It means that as you write tests with lettuce, it can be very useful
+to handle data within steps.</p>
+<p>Step tables are here for you</p>
+<div class="highlight-ruby"><pre>Feature: bill students alphabetically
+  In order to bill students properly
+  As a financial specialist
+  I want to bill those which name starts with some letter
+
+  Scenario: Bill students which name starts with "G"
+    Given I have the following students in my database:
+      | name     | monthly_due | billed |
+      | Anton    | $ 500       | no     |
+      | Jack     | $ 400       | no     |
+      | Gabriel  | $ 300       | no     |
+      | Gloria   | $ 442.65    | no     |
+      | Ken      | $ 907.86    | no     |
+      | Leonard  | $ 742.84    | no     |
+    When I bill names starting with "G"
+    Then I see those billed students:
+      | Gabriel  | $ 300       | no     |
+      | Gloria   | $ 442.65    | no     |
+    And those that weren't:
+      | Anton    | $ 500       | no     |
+      | Jack     | $ 400       | no     |
+      | Ken      | $ 907.86    | no     |
+      | Leonard  | $ 742.84    | no     |</pre>
+</div>
+<p>In the example above there are 4 steps, in which 3 contains tables.</p>
+<p>Now let us imagine that we&#8217;re using <a class="reference external" href="http://djangoproject.com/">Django</a> and write a step definition
+that uses the table.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="n">step</span>
+<span class="kn">from</span> <span class="nn">school.models</span> <span class="kn">import</span> <span class="n">Student</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I have the following students in my database:&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">students_in_database</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">student_dict</span> <span class="ow">in</span> <span class="n">step</span><span class="o">.</span><span class="n">hashes</span><span class="p">:</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">Student</span><span class="p">(</span><span class="o">**</span><span class="n">student_dict</span><span class="p">)</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>What about handy functions for getting the first or the last row of
+the tables ?!</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="n">step</span>
+<span class="kn">from</span> <span class="nn">school.models</span> <span class="kn">import</span> <span class="n">Student</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I have the following students in my database:&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">students_in_database</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="n">person1</span> <span class="o">=</span> <span class="n">Student</span><span class="p">(</span><span class="o">**</span><span class="n">step</span><span class="o">.</span><span class="n">hashes</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
+    <span class="n">person2</span> <span class="o">=</span> <span class="n">Student</span><span class="p">(</span><span class="o">**</span><span class="n">step</span><span class="o">.</span><span class="n">hashes</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
+
+    <span class="n">person1</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="n">person2</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Easy, huh?!</p>
+<p>Every step has a attribute called hashes which is a list of
+dicts. Each dict has represents table headers as keys and each table
+row as value.</p>
+<p>In other words, lettuce will translate the table written in the first
+step as this equivalent dict</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I have the following students in my database:&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">students_in_database</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">step</span><span class="o">.</span><span class="n">hashes</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Anton&#39;</span><span class="p">,</span>
+            <span class="s">&#39;monthly_due&#39;</span><span class="p">:</span> <span class="s">&#39;$ 500&#39;</span><span class="p">,</span>
+            <span class="s">&#39;billed&#39;</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Jack&#39;</span><span class="p">,</span>
+            <span class="s">&#39;monthly_due&#39;</span><span class="p">:</span> <span class="s">&#39;$ 400&#39;</span><span class="p">,</span>
+            <span class="s">&#39;billed&#39;</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Gabriel&#39;</span><span class="p">,</span>
+            <span class="s">&#39;monthly_due&#39;</span><span class="p">:</span> <span class="s">&#39;$ 300&#39;</span><span class="p">,</span>
+            <span class="s">&#39;billed&#39;</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Gloria&#39;</span><span class="p">,</span>
+            <span class="s">&#39;monthly_due&#39;</span><span class="p">:</span> <span class="s">&#39;$ 442.65&#39;</span><span class="p">,</span>
+            <span class="s">&#39;billed&#39;</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Ken&#39;</span><span class="p">,</span>
+            <span class="s">&#39;monthly_due&#39;</span><span class="p">:</span> <span class="s">&#39;$ 907.86&#39;</span><span class="p">,</span>
+            <span class="s">&#39;billed&#39;</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Leonard&#39;</span><span class="p">,</span>
+            <span class="s">&#39;monthly_due&#39;</span><span class="p">:</span> <span class="s">&#39;$ 742.84&#39;</span><span class="p">,</span>
+            <span class="s">&#39;billed&#39;</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="simple.html">introduction</a></li>
+    
+    
+      <li>Next: <a href="multiline.html">multi-line strings</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>handling data with tables</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tutorial/tables.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="simple.html" title="introduction">previous</a>
+     |
+   |
+    <a href="multiline.html" title="multi-line strings">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

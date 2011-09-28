@@ -1,0 +1,184 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>calling steps from step definitions &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="the command line" href="../reference/cli.html" />
+    <link rel="prev" title="scenario outlines" href="scenario-outlines.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="scenario-outlines.html" title="scenario outlines">previous</a>
+     |
+   |
+    <a href="../reference/cli.html" title="the command line">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="tutorial-steps-from-step-definitions">
+            
+  <div class="section" id="lettuce-calling-steps-from-step-definitions">
+<span id="lettuce-tutorial-steps-from-step-definitions"></span><h1>calling steps from step definitions<a class="headerlink" href="#lettuce-calling-steps-from-step-definitions" title="Permalink to this headline">¶</a></h1>
+<p>Our tests should be as expressive as possible. However, we also want to re-use steps that we&#8217;ve seen before. With the tools we&#8217;ve used so far, you could end up with seriously long step definitions.</p>
+<div class="highlight-ruby"><pre>Scenario: Logged-in user does something cool.
+  Given I go to the home page
+  And I click the login button
+  And I fill in username:floppy password:banana
+  And I click "Login"
+  When I finally do something interesting
+  Then I'm already too bored to care.</pre>
+</div>
+<p>In this case, we probably had a test case (maybe several) for which it was actually valuable to express how the user interacted with the login form. That&#8217;s where we got the step definitions for our login sequence. When the login form isn&#8217;t especially interesting any more, however, these steps are just noise. We&#8217;d really like to be able to define something like this without duplicating our step definitions.</p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Scenario</span><span class="p">:</span> <span class="no">Logged</span><span class="o">-</span><span class="k">in</span> <span class="n">user</span> <span class="n">does</span> <span class="n">something</span> <span class="n">cool</span><span class="o">.</span>
+  <span class="no">Given</span> <span class="n">I</span> <span class="n">am</span> <span class="n">logged</span> <span class="k">in</span>
+  <span class="no">When</span> <span class="n">I</span> <span class="k">do</span> <span class="n">something</span> <span class="n">interesting</span>
+  <span class="no">Then</span> <span class="no">The</span> <span class="n">world</span> <span class="n">becomes</span> <span class="n">a</span> <span class="n">better</span> <span class="n">place</span>
+</pre></div>
+</div>
+<p>Lettuce affords you the ability to write such a &#8220;step of steps&#8221; with a set of helpers matching each of the grammar terms <tt class="docutils literal"><span class="pre">Given</span></tt>, <tt class="docutils literal"><span class="pre">When</span></tt> and <tt class="docutils literal"><span class="pre">Then</span></tt>. You could accomplish the above like so.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I am logged in&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">is_logged_in</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="n">step</span><span class="o">.</span><span class="n">given</span><span class="p">(</span><span class="s">&#39;I go to the home page&#39;</span><span class="p">)</span>
+    <span class="n">step</span><span class="o">.</span><span class="n">given</span><span class="p">(</span><span class="s">&#39;I click the login button&#39;</span><span class="p">)</span>
+    <span class="c"># ... and so on.</span>
+</pre></div>
+</div>
+<div class="section" id="lettuce-running-blocks-of-steps">
+<h2>running blocks of steps<a class="headerlink" href="#lettuce-running-blocks-of-steps" title="Permalink to this headline">¶</a></h2>
+<p>It is sometimes even desirable to run blocks of steps, copy-and-pasted directly from Feature specifications. The <tt class="docutils literal"><span class="pre">Step.behave_as</span></tt> method lets you do this, and you can use <tt class="docutils literal"><span class="pre">str.format</span></tt> to fill in parameters dynamically. For example, we can write the above step definition like so:</p>
+<div class="highlight-python"><pre>@step('I am logged in')
+def is_logged_in(step):
+    step.behave_as("""
+        Given I go to the home page
+          And I click the login button
+          And I fill in username:{user} password:{pass}
+          And I click "Login"
+    """.format(user='floppy', pass='banana'))</pre>
+</div>
+<p>This can be combined with step argument capture for step definitions that are both expressive and DRY.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">calling steps from step definitions</a><ul>
+<li><a class="reference internal" href="#running-blocks-of-steps">running blocks of steps</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="scenario-outlines.html">scenario outlines</a></li>
+    
+    
+      <li>Next: <a href="../reference/cli.html">the command line</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>calling steps from step definitions</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tutorial/steps-from-step-definitions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="scenario-outlines.html" title="scenario outlines">previous</a>
+     |
+   |
+    <a href="../reference/cli.html" title="the command line">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

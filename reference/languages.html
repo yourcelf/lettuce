@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>language support &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="Lettuce recipe: Using nose for pretty assertions" href="../recipes/nose.html" />
+    <link rel="prev" title="the “terrain”" href="terrain.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="terrain.html" title="the &amp;#8220;terrain&amp;#8221;">previous</a>
+     |
+   |
+    <a href="../recipes/nose.html" title="Lettuce recipe: Using nose for pretty assertions">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="reference-languages">
+            
+  <div class="section" id="lettuce-language-support">
+<span id="lettuce-reference-languages"></span><h1>language support<a class="headerlink" href="#lettuce-language-support" title="Permalink to this headline">¶</a></h1>
+<p>Lettuce currently supports two languages:</p>
+<ul class="simple">
+<li>English</li>
+<li>Portuguese (Brazilian)</li>
+</ul>
+<p>Although it&#8217;s only about writing tests since the current version
+does output only in English.</p>
+<div class="section" id="lettuce-writing-features-in-a-specific-language">
+<h2>writing features in a specific language<a class="headerlink" href="#lettuce-writing-features-in-a-specific-language" title="Permalink to this headline">¶</a></h2>
+<p>You can tell lettuce the language of a feature file through adding a comment in the first line of the file, using the following syntax:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># language: &lt;code&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="lettuce-english-example">
+<h3>english example<a class="headerlink" href="#lettuce-english-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="c1"># language: en</span>
+<span class="no">Feature</span><span class="p">:</span> <span class="n">write</span> <span class="n">features</span> <span class="k">in</span> <span class="n">english</span>
+   <span class="no">Scenario</span><span class="p">:</span> <span class="n">simple</span> <span class="n">scenario</span>
+      <span class="no">Given</span> <span class="n">I</span> <span class="n">write</span> <span class="n">a</span> <span class="n">file</span> <span class="n">which</span> <span class="n">starts</span> <span class="n">with</span> <span class="s2">&quot;# language: en&quot;</span>
+      <span class="no">Then</span> <span class="n">it</span> <span class="n">must</span> <span class="n">be</span> <span class="n">parsed</span> <span class="n">with</span> <span class="n">proper</span> <span class="n">english</span> <span class="n">keywords</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-brazilian-portuguese-example">
+<h3>brazilian portuguese example<a class="headerlink" href="#lettuce-brazilian-portuguese-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ruby"><pre># language: pt-br
+Funcionalidade: escrever funcionalidades em português
+   Cenário: cenário simples
+      Dado que eu crio um arquivo que começa com "# language: pt-br"
+      Então ele deve ser interpretado com as devidas palavras-chave brasileiras</pre>
+</div>
+</div>
+</div>
+<div class="section" id="lettuce-adding-support-to-other-languages">
+<h2>adding support to other languages<a class="headerlink" href="#lettuce-adding-support-to-other-languages" title="Permalink to this headline">¶</a></h2>
+<p>We love contribution, so if you want to bring lettuce to your native
+language there is a single and simple way.</p>
+<div class="section" id="lettuce-fetch-the-code">
+<h3>fetch the code<a class="headerlink" href="#lettuce-fetch-the-code" title="Permalink to this headline">¶</a></h3>
+<p>First of all, you must have <a class="reference external" href="http://git-scm.com/">git</a> control version installed in your machine.</p>
+<p>Once you have it installed, grab the code with</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~<span class="nv">$ </span>git clone git://github.com/gabrielfalcao/lettuce.git
+</pre></div>
+</div>
+<p>And edit the file located at:</p>
+<div class="highlight-bash"><div class="highlight"><pre>lettuce/languages.py
+</pre></div>
+</div>
+<p>And add a new dictionary entry for your native language.</p>
+<p>Let&#8217;s see the Brazilian Portuguese translation to exemplify.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">LANGUAGES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;pt-br&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&#39;examples&#39;</span><span class="p">:</span> <span class="s">u&#39;Exemplos|Cenários&#39;</span><span class="p">,</span>
+        <span class="s">&#39;feature&#39;</span><span class="p">:</span> <span class="s">u&#39;Funcionalidade&#39;</span><span class="p">,</span>
+        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">u&#39;Portuguese&#39;</span><span class="p">,</span>
+        <span class="s">&#39;native&#39;</span><span class="p">:</span> <span class="s">u&#39;Português&#39;</span><span class="p">,</span>
+        <span class="s">&#39;scenario&#39;</span><span class="p">:</span> <span class="s">u&#39;Cenário|Cenario&#39;</span><span class="p">,</span>
+        <span class="s">&#39;scenario_outline&#39;</span><span class="p">:</span> <span class="s">u&#39;Esquema do Cenário|Esquema do Cenario&#39;</span><span class="p">,</span>
+        <span class="s">&#39;scenario_separator&#39;</span><span class="p">:</span> <span class="s">u&#39;(Esquema do Cenário|Esquema do Cenario|Cenario|Cenário)&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The key of the dict will be used as identifier for the comment
+<tt class="docutils literal"><span class="pre">#</span> <span class="pre">language:</span> <span class="pre">identifier</span></tt> at feature files.</p>
+<p>The value must be a dict, where the keys are canonical representation
+of keywords (string), and the values must be a pipe-separated string
+with translation possibilities.</p>
+<p>It allows different translations for the same keyword in the current
+language, which offers many possibilities for different semantical
+cases.</p>
+<p>For example, when using scenario outlines, it can be semantically nicer to write:</p>
+<div class="highlight-python"><pre>Scenarios:
+   | name | age |
+   | John | 22  |
+   | Mary | 53  |</pre>
+</div>
+<p>Instead of:</p>
+<div class="highlight-python"><pre>Examples:
+   | name | age |
+   | John | 22  |
+   | Mary | 53  |</pre>
+</div>
+</div>
+<div class="section" id="lettuce-add-your-translation">
+<h3>add your translation<a class="headerlink" href="#lettuce-add-your-translation" title="Permalink to this headline">¶</a></h3>
+<p>Now you can add your own language to lettuce, save the <tt class="docutils literal"><span class="pre">languages.py</span></tt> file and commit in the source control with.</p>
+<p>For example, let&#8217;s suppose that you&#8217;ve added Spanish support:</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/lettuce<span class="nv">$ </span>git commit lettuce/languages.py -m <span class="s1">&#39;adding translation for spanish&#39;</span>
+</pre></div>
+</div>
+<p>Generate a patch:</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/lettuce<span class="nv">$ </span>git format patch HEAD^1
+</pre></div>
+</div>
+<p>And send to lettuce&#8217;s <a class="reference external" href="http://github.com/gabrielfalcao/lettuce/issues">ticket</a> tracker as a <a class="reference external" href="http://gist.github.com/">gist</a> or something like it.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">language support</a><ul>
+<li><a class="reference internal" href="#writing-features-in-a-specific-language">writing features in a specific language</a><ul>
+<li><a class="reference internal" href="#english-example">english example</a></li>
+<li><a class="reference internal" href="#brazilian-portuguese-example">brazilian portuguese example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-support-to-other-languages">adding support to other languages</a><ul>
+<li><a class="reference internal" href="#fetch-the-code">fetch the code</a></li>
+<li><a class="reference internal" href="#add-your-translation">add your translation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="terrain.html">the &#8220;terrain&#8221;</a></li>
+    
+    
+      <li>Next: <a href="../recipes/nose.html">Lettuce recipe: Using nose for pretty assertions</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>language support</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/languages.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="terrain.html" title="the &amp;#8220;terrain&amp;#8221;">previous</a>
+     |
+   |
+    <a href="../recipes/nose.html" title="Lettuce recipe: Using nose for pretty assertions">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

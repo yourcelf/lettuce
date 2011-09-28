@@ -1,0 +1,207 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nutshell &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="#" />
+    <link rel="next" title="Overview" href="intro/overview.html" />
+    <link rel="prev" title="Lettuce documentation contents" href="contents.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="">
+    <div id="hd">
+      <h1><a href="#">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="#">Home</a>  |
+        <a title="Table of contents" href="contents.html">Table of contents</a>  |
+        <a title="Global index" href="genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="contents.html" title="Lettuce documentation contents">previous</a>
+     |
+   |
+    <a href="intro/overview.html" title="Overview">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="index">
+            
+  <p class="rubric" id="index">All you need to know, from leaves to root</p>
+<div class="section" id="lettuce-nutshell">
+<h1>nutshell<a class="headerlink" href="#lettuce-nutshell" title="Permalink to this headline">¶</a></h1>
+<p><strong>install it</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~<span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip install lettuce
+</pre></div>
+</div>
+<p><strong>describe your first feature</strong></p>
+<div class="highlight-ruby"><div class="highlight"><pre><span class="no">Feature</span><span class="p">:</span> <span class="no">Manipulate</span> <span class="n">strings</span>
+  <span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">have</span> <span class="n">some</span> <span class="n">fun</span>
+  <span class="no">As</span> <span class="n">a</span> <span class="n">programming</span> <span class="n">beginner</span>
+  <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">manipulate</span> <span class="n">strings</span>
+
+  <span class="no">Scenario</span><span class="p">:</span> <span class="no">Uppercased</span> <span class="n">strings</span>
+    <span class="no">Given</span> <span class="n">I</span> <span class="n">have</span> <span class="n">the</span> <span class="n">string</span> <span class="s2">&quot;lettuce leaves&quot;</span>
+    <span class="no">When</span> <span class="n">I</span> <span class="n">put</span> <span class="n">it</span> <span class="k">in</span> <span class="n">upper</span> <span class="k">case</span>
+    <span class="no">Then</span> <span class="n">I</span> <span class="n">see</span> <span class="n">the</span> <span class="n">string</span> <span class="n">is</span> <span class="s2">&quot;LETTUCE LEAVES&quot;</span>
+</pre></div>
+</div>
+<p><strong>define its steps</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lettuce</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I have the string &quot;(.*)&quot;&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">have_the_string</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">world</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="n">string</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I put it in upper case&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">put_it_in_upper</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">world</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">string</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@step</span><span class="p">(</span><span class="s">&#39;I see the string is &quot;(.*)&quot;&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">see_the_string_is</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">assert</span> <span class="n">world</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="n">expected</span><span class="p">,</span> \
+<span class="gp">... </span>        <span class="s">&quot;Got </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">world</span><span class="o">.</span><span class="n">string</span>
+</pre></div>
+</div>
+<p><strong>watch it pass</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/Projects/my-project<span class="nv">$ </span>lettuce features/
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-getting-involved">
+<h1>getting involved !<a class="headerlink" href="#lettuce-getting-involved" title="Permalink to this headline">¶</a></h1>
+<p><strong>github project page</strong></p>
+<p>Fork it, propose features, explore the code</p>
+<p><a class="reference external" href="http://github.com/gabrielfalcao/lettuce">github.com/gabrielfalcao/lettuce</a>.</p>
+<p><strong>feedback</strong></p>
+<p><a class="reference external" href="http://github.com/gabrielfalcao/lettuce/issues">issue tracker</a>.</p>
+<p><strong>discuss</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="http://groups.google.com/group/lettuce-users">lettuce users mailing list</a>.</li>
+<li><a class="reference external" href="http://groups.google.com/group/lettuce-developers">lettuce development mailing list</a>.</li>
+</ul>
+<p><strong>donate</strong></p>
+<p><a class="reference external" href="http://pledgie.com/campaigns/10604">support lettuce development</a></p>
+</div>
+<div class="section" id="lettuce-hands-on">
+<h1>hands on!<a class="headerlink" href="#lettuce-hands-on" title="Permalink to this headline">¶</a></h1>
+<p>Is this your first experience with Lettuce ?!?</p>
+<p>So, why don&#8217;t you go straight to the <a class="reference internal" href="tutorial/simple.html#tutorial-simple"><em>quick start tutorial</em></a> ?!</p>
+</div>
+<div class="section" id="lettuce-introduction">
+<h1>introduction<a class="headerlink" href="#lettuce-introduction" title="Permalink to this headline">¶</a></h1>
+<p><strong>what is Lettuce, and what it does</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="intro/overview.html#intro-overview"><em>overview</em></a></li>
+<li><a class="reference internal" href="intro/install.html#intro-install"><em>installation</em></a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="lettuce-what-the-feature">
+<h2>what the feature ?!<a class="headerlink" href="#lettuce-what-the-feature" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="intro/wtf.html#intro-wtf"><em>understand the terms behind Lettuce</em></a></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="lettuce-walkthrough">
+<h1>walkthrough<a class="headerlink" href="#lettuce-walkthrough" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="tutorial/simple.html#tutorial-simple"><em>write your first feature</em></a></li>
+<li><a class="reference internal" href="tutorial/tables.html#tutorial-tables"><em>handling data with tables</em></a></li>
+<li><a class="reference internal" href="tutorial/multiline.html#tutorial-multiline"><em>multi-line strings</em></a></li>
+<li><a class="reference internal" href="tutorial/scenario-outlines.html#tutorial-scenario-outlines"><em>don&#8217;t repeat yourself, meet scenario outlines</em></a></li>
+<li><a class="reference internal" href="tutorial/steps-from-step-definitions.html#tutorial-steps-from-step-definitions"><em>clean up your spec definitions, calling one step from another</em></a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="lettuce-integrate">
+<h1>integrate!<a class="headerlink" href="#lettuce-integrate" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="recipes/django-lxml.html#recipes-django-lxml"><em>Lettuce and Django</em></a>, for the sake of web development fun</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="lettuce-furthermore">
+<h1>furthermore<a class="headerlink" href="#lettuce-furthermore" title="Permalink to this headline">¶</a></h1>
+<p><strong>reference and concepts</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="reference/cli.html#reference-cli"><em>the command line</em></a>, how to run lettuce with different verbosity levels, and other cli options</li>
+<li><a class="reference internal" href="reference/features.html#reference-features"><em>features, scenarios and steps</em></a>, diving into lettuce&#8217;s core</li>
+<li><a class="reference internal" href="reference/terrain.html#reference-terrain"><em>terrain, world and hooks</em></a>, stuff about setting up a environment for lettuce</li>
+<li><a class="reference internal" href="reference/languages.html#reference-languages"><em>language support</em></a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="lettuce-recipes">
+<h1>recipes<a class="headerlink" href="#lettuce-recipes" title="Permalink to this headline">¶</a></h1>
+<p><strong>make your own salad</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="recipes/nose.html#recipes-nose"><em>nicer assertions with nose</em></a></li>
+</ul>
+</div></blockquote>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="contents.html" title="Lettuce documentation contents">previous</a>
+     |
+   |
+    <a href="intro/overview.html" title="Overview">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>

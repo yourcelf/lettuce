@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing Lettuce &mdash; Lettuce v0.1.33 (barium release) documentation</title>
+    <link rel="stylesheet" href="../_static/lettuce-docs.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.33 (barium release)',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Lettuce v0.1.33 (barium release) documentation" href="../index.html" />
+    <link rel="next" title="What the f** eature ?" href="wtf.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+      </div>
+      <div class="nav">
+    &laquo; <a href="overview.html" title="Overview">previous</a>
+     |
+   |
+    <a href="wtf.html" title="What the f** eature ?">next</a> &raquo;</div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="intro-install">
+            
+  <div class="section" id="lettuce-installing-lettuce">
+<span id="lettuce-intro-install"></span><h1>Installing Lettuce<a class="headerlink" href="#lettuce-installing-lettuce" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="lettuce-stable-release">
+<h2>Stable release<a class="headerlink" href="#lettuce-stable-release" title="Permalink to this headline">¶</a></h2>
+<p>You can install the latest stable release with pip</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~<span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip install lettuce
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-using-control-version-s-head">
+<h2>Using control version&#8217;s HEAD<a class="headerlink" href="#lettuce-using-control-version-s-head" title="Permalink to this headline">¶</a></h2>
+<p>Otherwise, if you&#8217;re a more adventurous developer, you can use the
+bleeding edge version of Lettuce by taking the git HEAD</p>
+<p>If you want so, you have basically 2 options:</p>
+<div class="section" id="lettuce-build-and-install-the-egg-from-sources">
+<h3>Build and install the egg from sources<a class="headerlink" href="#lettuce-build-and-install-the-egg-from-sources" title="Permalink to this headline">¶</a></h3>
+<p>Good for those that just want to use the latest features</p>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/Downloads<span class="nv">$ </span>git clone git://github.com/gabrielfalcao/lettuce.git
+user@machine:~/Downloads<span class="nv">$ </span><span class="nb">cd </span>lettuce
+user@machine:~/Downloads/lettuce<span class="nv">$ </span>sudo python setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="lettuce-use-the-latest-code-to-contribute-with-lettuce-s-codebase">
+<h3>Use the latest code to contribute with lettuce&#8217;s codebase<a class="headerlink" href="#lettuce-use-the-latest-code-to-contribute-with-lettuce-s-codebase" title="Permalink to this headline">¶</a></h3>
+<p>If it is your case, I strongly recommend a sandbox:</p>
+<p><strong>GNU/Linux:</strong></p>
+<ol class="arabic simple">
+<li>Fetch the code</li>
+</ol>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/Projects<span class="nv">$ </span>git clone git://github.com/gabrielfalcao/lettuce.git
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Add to your PYTHONPATH</li>
+</ol>
+<div class="highlight-bash"><div class="highlight"><pre>user@machine:~/Projects<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;export PYTHONPATH=$HOME/Projects/lettuce:$PYTHONPATH&quot;</span> &gt;&gt; <span class="nv">$HOME</span>/.bashrc
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Open a new terminal and enjoy!</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing Lettuce</a><ul>
+<li><a class="reference internal" href="#stable-release">Stable release</a></li>
+<li><a class="reference internal" href="#using-control-version-s-head">Using control version&#8217;s HEAD</a><ul>
+<li><a class="reference internal" href="#build-and-install-the-egg-from-sources">Build and install the egg from sources</a></li>
+<li><a class="reference internal" href="#use-the-latest-code-to-contribute-with-lettuce-s-codebase">Use the latest code to contribute with lettuce&#8217;s codebase</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="overview.html">Overview</a></li>
+    
+    
+      <li>Next: <a href="wtf.html">What the f** eature ?</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Lettuce v0.1.33 (barium release) documentation</a>
+        
+        <ul><li>Installing Lettuce</li></ul>
+        
+      </li>
+  </ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/intro/install.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Sep 28, 2011</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="overview.html" title="Overview">previous</a>
+     |
+   |
+    <a href="wtf.html" title="What the f** eature ?">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+      documentation automatically generated by <a href="http://sphonx.pocoo.org">Sphinx</a> |
+      background image by <a href="http://www.flickr.com/photos/photofarmer/">Photofarmer</a> at <a href="http://flickr.com">Flickr</a>
+  </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1277640-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>
