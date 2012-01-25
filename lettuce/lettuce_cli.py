@@ -55,7 +55,7 @@ def main(args=sys.argv[1:]):
                       dest="fail_fast",
                       action="store_true",
                       default=False,
-                      help='Stop testing futher features if one failes.')
+                      help='Stop testing further scenarios if one fails.')
 
     options, args = parser.parse_args()
     if args:

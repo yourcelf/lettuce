@@ -62,7 +62,7 @@ class Command(BaseCommand):
             help='Write JUnit XML to this file. Defaults to lettucetests.xml'),
 
         make_option('--fail-fast', action='store_true', dest='fail_fast', default=False,
-            help='Stop testing further features if one fails.'),
+            help='Stop testing further scenarios if one fails.'),
     )
 
     def stopserver(self, failed=False):
