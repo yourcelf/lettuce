@@ -70,7 +70,8 @@ class Runner(object):
     features and step definitions on there.
     """
     def __init__(self, base_path, scenarios=None, verbosity=0,
-                 enable_xunit=False, xunit_filename=None):
+                 enable_xunit=False, xunit_filename=None,
+                 fail_fast=False):
         """ lettuce.Runner will try to find a terrain.py file and
         import it from within `base_path`
         """
@@ -83,6 +84,7 @@ class Runner(object):
         sys.path.insert(0, base_path)
         self.loader = fs.FeatureLoader(base_path)
         self.verbosity = verbosity
+        self.fail_fast = fail_fast
         self.scenarios = scenarios and map(int, scenarios.split(",")) or None
 
         sys.path.remove(base_path)
@@ -132,8 +134,11 @@ class Runner(object):
         try:
             for filename in features_files:
                 feature = Feature.from_file(filename)
-                results.append(
-                    feature.run(self.scenarios))
+                feature.fail_fast = self.fail_fast
+                result = feature.run(self.scenarios)
+                results.append(result)
+                if self.fail_fast and not result.passed:
+                    break
 
         except exceptions.LettuceSyntaxError, e:
             sys.stderr.write(e.msg)

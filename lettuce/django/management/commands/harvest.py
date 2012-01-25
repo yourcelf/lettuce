@@ -60,6 +60,9 @@ class Command(BaseCommand):
 
         make_option('--xunit-file', action='store', dest='xunit_file', default=None,
             help='Write JUnit XML to this file. Defaults to lettucetests.xml'),
+
+        make_option('--fail-fast', action='store_true', dest='fail_fast', default=False,
+            help='Stop testing further features if one fails.'),
     )
 
     def stopserver(self, failed=False):
@@ -113,7 +116,8 @@ class Command(BaseCommand):
 
                 runner = Runner(path, options.get('scenarios'), verbosity,
                                 enable_xunit=options.get('enable_xunit'),
-                                xunit_filename=options.get('xunit_file'))
+                                xunit_filename=options.get('xunit_file'),
+                                fail_fast=options.get('fail_fast'))
                 result = runner.run()
                 if app_module is not None:
                     registry.call_hook('after_each', 'app', app_module, result)

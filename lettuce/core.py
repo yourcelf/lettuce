@@ -703,13 +703,14 @@ class Feature(object):
     described_at = None
 
     def __init__(self, name, remaining_lines, with_file, original_string,
-                 language=None):
+                 language=None, fail_fast=False):
 
         if not language:
             language = language()
 
         self.name = name
         self.language = language
+        self.fail_fast = fail_fast
 
         self.scenarios, self.description = self._parse_remaining_lines(
             remaining_lines,
@@ -850,7 +851,10 @@ class Feature(object):
             if scenarios_to_run and (index + 1) not in scenarios_to_run:
                 continue
 
-            scenarios_ran.extend(scenario.run(ignore_case))
+            result = scenario.run(ignore_case)
+            scenarios_ran.extend(result)
+            if self.fail_fast and not FeatureResult(self, *result).passed:
+                break
 
         call_hook('after_each', 'feature', self)
         return FeatureResult(self, *scenarios_ran)
