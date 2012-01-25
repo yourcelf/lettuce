@@ -276,6 +276,40 @@ def test_output_with_success_colorless_many_features():
     )
 
 @with_setup(prepare_stdout)
+def test_fail_fast():
+    "Testing that scenario/feature execution stops if we pass the `fail_fast` option."
+    runner = Runner(join(abspath(dirname(__file__)), 'output_features', 'fail_fast_features'), verbosity=3, fail_fast=True)
+    runner.run()
+    assert_stdout_lines(
+        "\nFeature: First feature, of many                              # tests/functional/output_features/fail_fast_features/one.feature:1\n"
+        "  In order to test more efficiently                          # tests/functional/output_features/fail_fast_features/one.feature:2\n"
+        "  As a programmer                                            # tests/functional/output_features/fail_fast_features/one.feature:3\n"
+        "  I want to be able to stop execution if one scenario fails. # tests/functional/output_features/fail_fast_features/one.feature:4\n"
+        "\n"
+        "  Scenario: Do nothing                                       # tests/functional/output_features/fail_fast_features/one.feature:6\n"
+        "    Given I do nothing                                       # tests/functional/output_features/fail_fast_features/dumb_steps.py:6\n"
+        "    Then I see that the test passes                          # tests/functional/output_features/fail_fast_features/dumb_steps.py:10\n"
+        "\n"
+        "  Scenario: Fail                                             # tests/functional/output_features/fail_fast_features/one.feature:10\n"
+        "    Given I do nothing                                       # tests/functional/output_features/fail_fast_features/dumb_steps.py:6\n"
+        "    Then I fail                                              # tests/functional/output_features/fail_fast_features/dumb_steps.py:14\n"
+        "    Traceback (most recent call last):\n"
+        '      File "%(lettuce_core_file)s", line %(call_line)s, in __call__\n'
+        "        ret = self.function(self.step, *args, **kw)\n"
+        '      File "%(step_file)s", line 15, in fail_me\n'
+        "        assert False\n"
+        "    AssertionError\n"
+        "\n"
+        "1 feature (0 passed)\n"
+        "2 scenarios (1 passed)\n"
+        "4 steps (1 failed, 3 passed)\n" % {
+            'lettuce_core_file': abspath(lettuce_path('core.py')),
+            'step_file': abspath(lettuce_path('..', 'tests', 'functional', 'output_features', 'fail_fast_features', 'dumb_steps.py')),
+            'call_line':call_line,
+        }
+    )
+
+@with_setup(prepare_stdout)
 def test_output_with_success_colorful_many_features():
     "Testing the colorful output of many successful features"
 
